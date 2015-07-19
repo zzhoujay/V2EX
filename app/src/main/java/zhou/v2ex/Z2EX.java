@@ -3,6 +3,7 @@ package zhou.v2ex;
 import android.app.Application;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.widget.Toast;
 
 /**
  * Created by 州 on 2015/7/18 0018.
@@ -32,5 +33,13 @@ public class Z2EX extends Application {
             return networkInfo.isAvailable();
         }
         return false;
+    }
+
+    public void toast(String msg) {
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+    }
+
+    public void toast(int res) {
+        Toast.makeText(this, res, Toast.LENGTH_SHORT).show();
     }
 }

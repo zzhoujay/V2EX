@@ -5,4 +5,6 @@
     <string name="action_settings">Settings</string>
     <string name="tab2">热门主题</string>
     <string name="tab1">最新主题</string>
+    <string name="about">关于</string>
+    <string name="setting">设置</string>
 </resources>

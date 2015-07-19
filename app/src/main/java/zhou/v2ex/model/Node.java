@@ -25,7 +25,7 @@ public class Node implements Serializable{
                 ", title='" + title + '\'' +
                 ", title_alternative='" + title_alternative + '\'' +
                 ", topics=" + topics +
-                ", header='" + header + '\'' +
+                ", num='" + header + '\'' +
                 ", footer='" + footer + '\'' +
                 ", created=" + created +
                 '}';
