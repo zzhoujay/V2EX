@@ -3,16 +3,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolBar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:layout_alignParentTop="true"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         android:background="@color/material_lightBlue_500" />
 
     <FrameLayout
-        android:id="@+id/node_content"
+        android:id="@+id/fragment_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/toolBar" />

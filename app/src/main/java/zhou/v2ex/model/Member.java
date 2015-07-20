@@ -1,11 +1,14 @@
 package zhou.v2ex.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.io.Serializable;
 
 /**
  * Created by 州 on 2015/7/18 0018.
  */
-public class Member implements Serializable{
+public class Member implements Serializable, Parcelable {
     public int id;
     public String username;
     public String website;
@@ -34,4 +37,52 @@ public class Member implements Serializable{
                 ", created=" + created +
                 '}';
     }
+
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.id);
+        dest.writeString(this.username);
+        dest.writeString(this.website);
+        dest.writeString(this.twitter);
+        dest.writeString(this.location);
+        dest.writeString(this.tagline);
+        dest.writeString(this.bio);
+        dest.writeString(this.avatar_mini);
+        dest.writeString(this.avatar_normal);
+        dest.writeString(this.avatar_large);
+        dest.writeLong(this.created);
+    }
+
+    public Member() {
+    }
+
+    protected Member(Parcel in) {
+        this.id = in.readInt();
+        this.username = in.readString();
+        this.website = in.readString();
+        this.twitter = in.readString();
+        this.location = in.readString();
+        this.tagline = in.readString();
+        this.bio = in.readString();
+        this.avatar_mini = in.readString();
+        this.avatar_normal = in.readString();
+        this.avatar_large = in.readString();
+        this.created = in.readLong();
+    }
+
+    public static final Parcelable.Creator<Member> CREATOR = new Parcelable.Creator<Member>() {
+        public Member createFromParcel(Parcel source) {
+            return new Member(source);
+        }
+
+        public Member[] newArray(int size) {
+            return new Member[size];
+        }
+    };
 }

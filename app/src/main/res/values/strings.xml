@@ -7,4 +7,8 @@
     <string name="tab1">最新主题</string>
     <string name="about">关于</string>
     <string name="setting">设置</string>
+    <string name="network_error">网络连接错误，请检查网络连接后重试</string>
+    <string name="load_error">加载失败</string>
+    <string name="unknown_error">未知错误</string>
+    <string name="topic_detail">主题详情</string>
 </resources>
