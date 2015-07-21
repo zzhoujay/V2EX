@@ -25,7 +25,9 @@ import zhou.v2ex.data.RepliesProvider;
 import zhou.v2ex.model.Member;
 import zhou.v2ex.model.Replies;
 import zhou.v2ex.model.Topic;
+import zhou.v2ex.ui.adapter.AdapterWithHeadAndFoot;
 import zhou.v2ex.ui.adapter.RepliesAdapter;
+import zhou.v2ex.ui.widget.RichText;
 import zhou.v2ex.util.TimeUtils;
 
 /**
@@ -36,11 +38,13 @@ public class TopicDetailFragment extends Fragment {
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView recyclerView;
     private ImageView icon;
-    private TextView user, time, replay, node, title, content;
+    private TextView user, time, replay, node, title;
+    private RichText content;
     private Topic topic;
     private RepliesAdapter repliesAdapter;
     private RepliesProvider repliesProvider;
     private View detail;
+    private AdapterWithHeadAndFoot adapterWithHeadAndFoot;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -56,14 +60,13 @@ public class TopicDetailFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_topic_detail, container, false);
+        View view = inflater.inflate(R.layout.fragment_recycler_view, container, false);
+        detail = inflater.inflate(R.layout.fragment_topic_detail, container, false);
 //        swipeRefreshLayout = (SwipeRefreshLayout) view;
-        RecyclerViewHeader recyclerViewHeader = (RecyclerViewHeader) view.findViewById(R.id.header_recycler_view);
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
-        initView(recyclerViewHeader);
+        initView(detail);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(linearLayoutManager);
-        recyclerViewHeader.attachTo(recyclerView, true);
         initData(topic);
 //        swipeRefreshLayout.setOnRefreshListener(onRefreshListener);
         DataManger.getInstance().getData(repliesProvider.FILE_NAME, new DataProvider.OnLoadComplete<List<Replies>>() {
@@ -83,7 +86,7 @@ public class TopicDetailFragment extends Fragment {
         replay.setText(topic.replies + "个回复");
         node.setText(topic.node.name);
         title.setText(topic.title);
-        content.setText(topic.content);
+        content.setRichText(topic.content_rendered);
     }
 
     private void initView(View view) {
@@ -93,12 +96,14 @@ public class TopicDetailFragment extends Fragment {
         replay = (TextView) view.findViewById(R.id.topic_replay);
         node = (TextView) view.findViewById(R.id.topic_node);
         title = (TextView) view.findViewById(R.id.topic_title);
-        content = (TextView) view.findViewById(R.id.topic_content);
+        content = (RichText) view.findViewById(R.id.topic_content);
     }
 
     private void setUp(List<Replies> replies) {
         repliesAdapter = new RepliesAdapter(replies);
-        recyclerView.setAdapter(repliesAdapter);
+        adapterWithHeadAndFoot = new AdapterWithHeadAndFoot(repliesAdapter);
+        adapterWithHeadAndFoot.addHeader(detail);
+        recyclerView.setAdapter(adapterWithHeadAndFoot);
     }
 
     private SwipeRefreshLayout.OnRefreshListener onRefreshListener = new SwipeRefreshLayout.OnRefreshListener() {

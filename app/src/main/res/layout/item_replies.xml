@@ -54,11 +54,10 @@
             android:layout_margin="4dp"
             android:textSize="@dimen/material_caption" />
 
-        <TextView
+        <zhou.v2ex.ui.widget.RichText
             android:id="@+id/item_replies_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
             android:layout_below="@id/item_replies_user"
             android:layout_toEndOf="@id/item_replies_icon"
             android:layout_toRightOf="@id/item_replies_icon"

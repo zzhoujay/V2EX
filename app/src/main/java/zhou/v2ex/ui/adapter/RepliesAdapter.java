@@ -13,6 +13,7 @@ import java.util.List;
 
 import zhou.v2ex.R;
 import zhou.v2ex.model.Replies;
+import zhou.v2ex.ui.widget.RichText;
 import zhou.v2ex.util.TimeUtils;
 
 /**
@@ -40,7 +41,7 @@ public class RepliesAdapter extends RecyclerView.Adapter<RepliesAdapter.Holder> 
         holder.user.setText(reply.member.username);
         holder.time.setText(TimeUtils.friendlyFormat(reply.created * 1000));
         holder.floor.setText(String.format("%d楼", (position + 1)));
-        holder.content.setText(reply.content);
+        holder.content.setRichText(reply.content_rendered);
         Picasso.with(holder.icon.getContext()).load("http:" + reply.member.avatar_normal)
                 .placeholder(R.drawable.default_image).into(holder.icon);
     }
@@ -53,7 +54,8 @@ public class RepliesAdapter extends RecyclerView.Adapter<RepliesAdapter.Holder> 
     public static class Holder extends RecyclerView.ViewHolder {
 
         public ImageView icon;
-        public TextView user, time, floor, content;
+        public TextView user, time, floor;
+        public RichText content;
 
         public Holder(View itemView) {
             super(itemView);
@@ -61,7 +63,7 @@ public class RepliesAdapter extends RecyclerView.Adapter<RepliesAdapter.Holder> 
             user = (TextView) itemView.findViewById(R.id.item_replies_user);
             time = (TextView) itemView.findViewById(R.id.item_replies_time);
             floor = (TextView) itemView.findViewById(R.id.item_replies_floor);
-            content = (TextView) itemView.findViewById(R.id.item_replies_content);
+            content = (RichText) itemView.findViewById(R.id.item_replies_content);
         }
     }
 
