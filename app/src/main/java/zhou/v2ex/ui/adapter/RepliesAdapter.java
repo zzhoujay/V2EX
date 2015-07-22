@@ -14,6 +14,7 @@ import java.util.List;
 import zhou.v2ex.R;
 import zhou.v2ex.model.Replies;
 import zhou.v2ex.ui.widget.RichText;
+import zhou.v2ex.util.ContentUtils;
 import zhou.v2ex.util.TimeUtils;
 
 /**
@@ -41,7 +42,7 @@ public class RepliesAdapter extends RecyclerView.Adapter<RepliesAdapter.Holder> 
         holder.user.setText(reply.member.username);
         holder.time.setText(TimeUtils.friendlyFormat(reply.created * 1000));
         holder.floor.setText(String.format("%d楼", (position + 1)));
-        holder.content.setRichText(reply.content_rendered);
+        holder.content.setRichText(ContentUtils.formatContent(reply.content_rendered));
         Picasso.with(holder.icon.getContext()).load("http:" + reply.member.avatar_normal)
                 .placeholder(R.drawable.default_image).into(holder.icon);
     }

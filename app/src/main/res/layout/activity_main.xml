@@ -20,13 +20,13 @@
                 android:id="@+id/toolBar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                android:background="@color/material_lightBlue_500" />
+                android:background="@color/material_cyan_500" />
 
             <android.support.design.widget.TabLayout
                 android:id="@+id/tabLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/material_lightBlue_500" />
+                android:background="@color/material_cyan_400" />
 
         </android.support.design.widget.AppBarLayout>
 

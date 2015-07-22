@@ -28,6 +28,7 @@ import zhou.v2ex.model.Topic;
 import zhou.v2ex.ui.adapter.AdvanceAdapter;
 import zhou.v2ex.ui.adapter.RepliesAdapter;
 import zhou.v2ex.ui.widget.RichText;
+import zhou.v2ex.util.ContentUtils;
 import zhou.v2ex.util.TimeUtils;
 
 /**
@@ -95,7 +96,7 @@ public class TopicDetailFragment extends Fragment {
         replay.setText(topic.replies + "个回复");
         node.setText(topic.node.name);
         title.setText(topic.title);
-        content.setRichText(topic.content_rendered);
+        content.setRichText(ContentUtils.formatContent(topic.content_rendered));
     }
 
     private void initView(View view) {

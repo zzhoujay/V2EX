@@ -3,6 +3,7 @@ package zhou.v2ex.data;
 import android.util.Log;
 
 import java.io.File;
+import java.util.List;
 
 import retrofit.Callback;
 import retrofit.RestAdapter;
@@ -74,7 +75,7 @@ public class TopicProvider implements DataProvider<Topic> {
 
     @Override
     public void getFromNet(final OnLoadComplete<Topic> loadComplete) {
-        if (Z2EX.getInstance().isNetworkConnected()) {
+        if (!Z2EX.getInstance().isNetworkConnected()) {
             //网络未连接
             Z2EX.getInstance().toast(R.string.network_error);
             if (loadComplete != null) {
@@ -82,18 +83,18 @@ public class TopicProvider implements DataProvider<Topic> {
             }
             return;
         }
-        topicService.getTopic(id, new Callback<Topic>() {
+        topicService.getTopic(id, new Callback<List<Topic>>() {
             @Override
-            public void success(Topic topic, Response response) {
-                Log.d("getFromNet", "success");
+            public void success(List<Topic> topic, Response response) {
+                Log.d("getFromNet", "success_topic");
                 if (loadComplete != null) {
-                    loadComplete.loadComplete(topic);
+                    loadComplete.loadComplete(topic.get(0));
                 }
             }
 
             @Override
             public void failure(RetrofitError error) {
-                Log.d("getFromNet", "failure", error);
+                Log.d("getFromNet", "failure_topic", error);
                 if (loadComplete != null) {
                     loadComplete.loadComplete(null);
                 }

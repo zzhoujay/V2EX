@@ -69,6 +69,9 @@ public class RichText extends TextView {
      * @param text 内容
      */
     public void setRichText(String text) {
+        if(text==null){
+            return;
+        }
         Spanned spanned = Html.fromHtml(text, asyncImageGetter, null);
         SpannableStringBuilder spannableStringBuilder;
         if (spanned instanceof SpannableStringBuilder) {

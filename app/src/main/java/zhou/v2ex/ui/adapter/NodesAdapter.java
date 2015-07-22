@@ -12,6 +12,8 @@ import zhou.v2ex.R;
 import zhou.v2ex.interfaces.ClickCallback;
 import zhou.v2ex.interfaces.OnItemClickListener;
 import zhou.v2ex.model.Node;
+import zhou.v2ex.ui.widget.RichText;
+import zhou.v2ex.util.ContentUtils;
 
 /**
  * Created by 州 on 2015/7/20 0020.
@@ -47,9 +49,8 @@ public class NodesAdapter extends RecyclerView.Adapter<NodesAdapter.Holder> {
     @Override
     public void onBindViewHolder(Holder holder, int position) {
         Node node = nodes.get(position);
-
         holder.title.setText(node.title);
-        holder.content.setText(node.header);
+        holder.content.setRichText(ContentUtils.formatContent(node.header));
         holder.num.setText(node.topics + "个主题");
     }
 
@@ -60,7 +61,8 @@ public class NodesAdapter extends RecyclerView.Adapter<NodesAdapter.Holder> {
 
     public static class Holder extends RecyclerView.ViewHolder {
 
-        public TextView title, content, num;
+        public TextView title, num;
+        public RichText content;
 
         private View parent;
         private OnItemClickListener onItemClickListener;
@@ -69,7 +71,7 @@ public class NodesAdapter extends RecyclerView.Adapter<NodesAdapter.Holder> {
             super(itemView);
             parent = itemView;
             title = (TextView) itemView.findViewById(R.id.item_node_title);
-            content = (TextView) itemView.findViewById(R.id.item_node_content);
+            content = (RichText) itemView.findViewById(R.id.item_node_content);
             num = (TextView) itemView.findViewById(R.id.item_node_num);
 
             parent.setOnClickListener(new View.OnClickListener() {

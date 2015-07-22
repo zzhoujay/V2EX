@@ -2,6 +2,8 @@
 <resources>
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="android:colorPrimary">@color/material_lightBlue_500</item>
+        <item name="android:colorPrimary">@color/material_cyan_500</item>
+        <item name="android:colorPrimaryDark">@color/material_cyan_700</item>
+        <item name="android:navigationBarColor">@color/material_cyan_900</item>
     </style>
 </resources>

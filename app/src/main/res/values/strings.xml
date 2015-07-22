@@ -13,4 +13,6 @@
     <string name="topic_detail">主题详情</string>
     <string name="all_node_list">所有节点列表</string>
     <string name="login">点击登录</string>
+    <string name="topic">主题</string>
+    <string name="node">节点</string>
 </resources>

@@ -1,5 +1,7 @@
 package zhou.v2ex.interfaces;
 
+import java.util.List;
+
 import retrofit.Callback;
 import retrofit.http.GET;
 import retrofit.http.Query;
@@ -11,6 +13,6 @@ import zhou.v2ex.model.Topic;
 public interface TopicService {
 
     @GET("/api/topics/show.json")
-    void getTopic(@Query("id") int id, Callback<Topic> topicCallback);
+    void getTopic(@Query("id") int id, Callback<List<Topic>> topicCallback);
 
 }
