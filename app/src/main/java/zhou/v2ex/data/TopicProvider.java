@@ -3,7 +3,6 @@ package zhou.v2ex.data;
 import android.util.Log;
 
 import java.io.File;
-import java.util.List;
 
 import retrofit.Callback;
 import retrofit.RestAdapter;
@@ -11,71 +10,71 @@ import retrofit.RetrofitError;
 import retrofit.client.Response;
 import zhou.v2ex.R;
 import zhou.v2ex.Z2EX;
-import zhou.v2ex.interfaces.RepliesService;
-import zhou.v2ex.model.Replies;
+import zhou.v2ex.interfaces.TopicService;
 import zhou.v2ex.model.Topic;
 import zhou.v2ex.util.FileUtils;
 
 /**
- * Created by 州 on 2015/7/20 0020.
+ * Created by zzhoujay on 2015/7/22 0022.
  */
-public class RepliesProvider implements DataProvider<List<Replies>> {
+public class TopicProvider implements DataProvider<Topic> {
 
-    public String FILE_NAME = "topic_replies_";
+    public String FILE_NAME = "topic_";
 
-    private List<Replies> replies;
     private Topic topic;
-    private RepliesService repliesService;
+    private TopicService topicService;
+    private int id;
 
-    public RepliesProvider(RestAdapter restAdapter, Topic topic) {
-        this.topic = topic;
-        FILE_NAME = FILE_NAME + topic.id;
-        repliesService = restAdapter.create(RepliesService.class);
+    public TopicProvider(RestAdapter restAdapter, int id) {
+        this.id = id;
+        topicService = restAdapter.create(TopicService.class);
+        FILE_NAME += id;
     }
+
 
     @Override
     public void persistence() {
-        if(replies==null){
+        if (!hasLoad()) {
             return;
         }
         new Thread() {
             @Override
             public void run() {
                 File file = new File(Z2EX.getInstance().getCacheDir(), FILE_NAME);
-                FileUtils.writeObject(file, replies);
+                FileUtils.writeObject(file, topic);
             }
         }.start();
     }
 
     @Override
-    public List<Replies> get() {
-        return replies;
+    public Topic get() {
+        return topic;
     }
 
     @Override
-    public void set(List<Replies> replies) {
-        this.replies = replies;
+    public void set(Topic topic) {
+        this.topic = topic;
     }
 
     @Override
-    public void getFromLocal(OnLoadComplete<List<Replies>> loadComplete) {
+    public void getFromLocal(OnLoadComplete<Topic> loadComplete) {
         File file = new File(Z2EX.getInstance().getCacheDir(), FILE_NAME);
-        List<Replies> rs = null;
+        Topic t = null;
         if (file.exists()) {
             try {
-                rs = (List<Replies>) FileUtils.readObject(file);
+                t = (Topic) FileUtils.readObject(file);
             } catch (Exception e) {
-                Log.d("getFromLocal", "RepliesProvider", e);
+                Log.d("getFromLocal", "error", e);
             }
         }
         if (loadComplete != null) {
-            loadComplete.loadComplete(rs);
+            loadComplete.loadComplete(t);
         }
     }
 
     @Override
-    public void getFromNet(final OnLoadComplete<List<Replies>> loadComplete) {
-        if (!Z2EX.getInstance().isNetworkConnected()) {
+    public void getFromNet(final OnLoadComplete<Topic> loadComplete) {
+        if (Z2EX.getInstance().isNetworkConnected()) {
             //网络未连接
             Z2EX.getInstance().toast(R.string.network_error);
             if (loadComplete != null) {
@@ -83,12 +82,12 @@ public class RepliesProvider implements DataProvider<List<Replies>> {
             }
             return;
         }
-        repliesService.getReplise(topic.id, new Callback<List<Replies>>() {
+        topicService.getTopic(id, new Callback<Topic>() {
             @Override
-            public void success(List<Replies> replies, Response response) {
+            public void success(Topic topic, Response response) {
                 Log.d("getFromNet", "success");
                 if (loadComplete != null) {
-                    loadComplete.loadComplete(replies);
+                    loadComplete.loadComplete(topic);
                 }
             }
 
@@ -104,12 +103,11 @@ public class RepliesProvider implements DataProvider<List<Replies>> {
 
     @Override
     public boolean hasLoad() {
-        return replies != null;
+        return topic != null;
     }
 
     @Override
     public boolean needCache() {
         return Z2EX.getInstance().saveCache();
     }
-
 }

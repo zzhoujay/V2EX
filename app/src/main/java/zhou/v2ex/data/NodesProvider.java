@@ -58,7 +58,11 @@ public class NodesProvider implements DataProvider<List<Node>> {
         File file = new File(Z2EX.getInstance().getCacheDir(), FILE_NAME);
         List<Node> ns = null;
         if (file.exists()) {
-            ns = (List<Node>) FileUtils.readObject(file);
+            try {
+                ns = (List<Node>) FileUtils.readObject(file);
+            } catch (Exception e) {
+                Log.d("getFromLocal", "NodesProvider", e);
+            }
         }
         if (loadComplete != null) {
             loadComplete.loadComplete(ns);
@@ -97,5 +101,10 @@ public class NodesProvider implements DataProvider<List<Node>> {
     @Override
     public boolean hasLoad() {
         return nodes != null;
+    }
+
+    @Override
+    public boolean needCache() {
+        return true;
     }
 }

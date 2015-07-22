@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bartoszlipinski.recyclerviewheader.RecyclerViewHeader;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -22,10 +21,11 @@ import zhou.v2ex.R;
 import zhou.v2ex.data.DataManger;
 import zhou.v2ex.data.DataProvider;
 import zhou.v2ex.data.RepliesProvider;
+import zhou.v2ex.data.TopicProvider;
 import zhou.v2ex.model.Member;
 import zhou.v2ex.model.Replies;
 import zhou.v2ex.model.Topic;
-import zhou.v2ex.ui.adapter.AdapterWithHeadAndFoot;
+import zhou.v2ex.ui.adapter.AdvanceAdapter;
 import zhou.v2ex.ui.adapter.RepliesAdapter;
 import zhou.v2ex.ui.widget.RichText;
 import zhou.v2ex.util.TimeUtils;
@@ -43,8 +43,8 @@ public class TopicDetailFragment extends Fragment {
     private Topic topic;
     private RepliesAdapter repliesAdapter;
     private RepliesProvider repliesProvider;
+    private TopicProvider topicProvider;
     private View detail;
-    private AdapterWithHeadAndFoot adapterWithHeadAndFoot;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -53,7 +53,9 @@ public class TopicDetailFragment extends Fragment {
         if (bundle != null && bundle.containsKey(Topic.TOPIC)) {
             topic = bundle.getParcelable(Topic.TOPIC);
             repliesProvider = new RepliesProvider(DataManger.getInstance().getRestAdapter(), topic);
+            topicProvider = new TopicProvider(DataManger.getInstance().getRestAdapter(), topic.id);
             DataManger.getInstance().addProvider(repliesProvider.FILE_NAME, repliesProvider);
+            DataManger.getInstance().addProvider(topicProvider.FILE_NAME, topicProvider);
         }
     }
 
@@ -62,23 +64,30 @@ public class TopicDetailFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_recycler_view, container, false);
         detail = inflater.inflate(R.layout.fragment_topic_detail, container, false);
-//        swipeRefreshLayout = (SwipeRefreshLayout) view;
+        swipeRefreshLayout = (SwipeRefreshLayout) view;
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         initView(detail);
+
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(linearLayoutManager);
         initData(topic);
-//        swipeRefreshLayout.setOnRefreshListener(onRefreshListener);
+        setUp(null);
+        swipeRefreshLayout.setRefreshing(true);
+        swipeRefreshLayout.setOnRefreshListener(onRefreshListener);
         DataManger.getInstance().getData(repliesProvider.FILE_NAME, new DataProvider.OnLoadComplete<List<Replies>>() {
             @Override
             public void loadComplete(List<Replies> replies) {
-                setUp(replies);
+                repliesAdapter.setReplies(replies);
+                swipeRefreshLayout.setRefreshing(false);
             }
         });
         return view;
     }
 
     private void initData(Topic topic) {
+        if (topic == null) {
+            return;
+        }
         Member member = topic.member;
         Picasso.with(getActivity()).load("http:" + member.avatar_normal).placeholder(R.drawable.default_image).into(icon);
         user.setText(member.username);
@@ -101,15 +110,16 @@ public class TopicDetailFragment extends Fragment {
 
     private void setUp(List<Replies> replies) {
         repliesAdapter = new RepliesAdapter(replies);
-        adapterWithHeadAndFoot = new AdapterWithHeadAndFoot(repliesAdapter);
-        adapterWithHeadAndFoot.addHeader(detail);
-        recyclerView.setAdapter(adapterWithHeadAndFoot);
+        AdvanceAdapter advanceAdapter = new AdvanceAdapter(repliesAdapter);
+        advanceAdapter.addHeader(detail);
+        recyclerView.setAdapter(advanceAdapter);
     }
 
     private SwipeRefreshLayout.OnRefreshListener onRefreshListener = new SwipeRefreshLayout.OnRefreshListener() {
         @Override
         public void onRefresh() {
             DataManger.getInstance().refresh(repliesProvider.FILE_NAME, onLoadComplete);
+            DataManger.getInstance().refresh(topicProvider.FILE_NAME, topicOnLoadComplete);
         }
     };
 
@@ -123,6 +133,18 @@ public class TopicDetailFragment extends Fragment {
         }
     };
 
+    private DataProvider.OnLoadComplete<Topic> topicOnLoadComplete = new DataProvider.OnLoadComplete<Topic>() {
+        @Override
+        public void loadComplete(Topic topic) {
+            initData(topic);
+        }
+    };
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        DataManger.getInstance().removeProvider(topicProvider.FILE_NAME);
+    }
 
     public static TopicDetailFragment newInstance(@NonNull Topic topic) {
         TopicDetailFragment topicDetailFragment = new TopicDetailFragment();

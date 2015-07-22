@@ -11,4 +11,6 @@
     <string name="load_error">加载失败</string>
     <string name="unknown_error">未知错误</string>
     <string name="topic_detail">主题详情</string>
+    <string name="all_node_list">所有节点列表</string>
+    <string name="login">点击登录</string>
 </resources>

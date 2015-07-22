@@ -12,9 +12,15 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import zhou.v2ex.data.DataManger;
 import zhou.v2ex.data.TopicsProvider;
+import zhou.v2ex.model.Member;
 import zhou.v2ex.ui.activity.NodesActivity;
 import zhou.v2ex.ui.fragment.TopicsFragment;
 
@@ -25,6 +31,9 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager viewPager;
     private NavigationView navigationView;
     private TopicsFragment[] fragments;
+    private ImageView icon;
+    private TextView name;
+    private View header;
 
     private int[] ids = {R.string.tab1, R.string.tab2};
 
@@ -99,6 +108,21 @@ public class MainActivity extends AppCompatActivity {
         tabLayout = (TabLayout) findViewById(R.id.tabLayout);
         viewPager = (ViewPager) findViewById(R.id.viewPage);
 
+        header = findViewById(R.id.header);
+        icon = (ImageView) findViewById(R.id.header_icon);
+        name = (TextView) findViewById(R.id.header_name);
+
+    }
+
+    private void setUserInfo(Member member) {
+        if (member == null) {
+            name.setText(R.string.login);
+            icon.setImageResource(R.mipmap.ic_launcher);
+            return;
+        }
+        name.setText(member.username);
+        Picasso.with(this).load("http:" + member.avatar_large).placeholder(R.mipmap.ic_launcher)
+                .error(R.mipmap.ic_launcher).into(icon);
     }
 
     @Override

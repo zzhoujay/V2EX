@@ -24,8 +24,8 @@ public class NodesActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayShowTitleEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            toolbar.setLogo(R.mipmap.ic_launcher);
         }
+        setTitle(R.string.all_node_list);
         NodesFragment nodesFragment = NodesFragment.newInstance();
         getSupportFragmentManager().beginTransaction().add(R.id.fragment_content, nodesFragment).commit();
     }

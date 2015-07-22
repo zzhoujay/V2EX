@@ -5,6 +5,11 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.widget.Toast;
 
+import java.io.File;
+
+import zhou.v2ex.model.Member;
+import zhou.v2ex.util.FileUtils;
+
 /**
  * Created by 州 on 2015/7/18 0018.
  */
@@ -14,7 +19,10 @@ public class Z2EX extends Application {
     public static final String LATEST_TOPIC_NAME = "latest.cache";
     public static final String NODE_NAME = "node.cache";
 
+
     private static Z2EX z2EX;
+
+    private Member self;
 
     @Override
     public void onCreate() {
@@ -29,10 +37,7 @@ public class Z2EX extends Application {
     public boolean isNetworkConnected() {
         ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-        if (networkInfo != null) {
-            return networkInfo.isAvailable();
-        }
-        return false;
+        return networkInfo != null && networkInfo.isAvailable();
     }
 
     public void toast(String msg) {
@@ -42,4 +47,10 @@ public class Z2EX extends Application {
     public void toast(int res) {
         Toast.makeText(this, res, Toast.LENGTH_SHORT).show();
     }
+
+
+    public boolean saveCache() {
+        return false;
+    }
+
 }

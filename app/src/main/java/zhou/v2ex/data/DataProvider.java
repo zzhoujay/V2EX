@@ -17,6 +17,8 @@ public interface DataProvider<T> {
 
     boolean hasLoad();
 
+    boolean needCache();
+
     interface OnLoadComplete<T> {
         void loadComplete(T t);
     }

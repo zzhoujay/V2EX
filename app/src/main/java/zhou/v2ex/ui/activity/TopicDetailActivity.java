@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 
 import zhou.v2ex.R;
@@ -25,11 +26,11 @@ public class TopicDetailActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayShowTitleEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            toolbar.setLogo(R.mipmap.ic_launcher);
         }
         setTitle(R.string.topic_detail);
         Intent intent = getIntent();
         if (intent.hasExtra(Topic.TOPIC)) {
+            Log.i("TopicDetailActivity", "has");
             Topic topic = intent.getParcelableExtra(Topic.TOPIC);
             TopicDetailFragment topicDetailFragment = TopicDetailFragment.newInstance(topic);
             getSupportFragmentManager().beginTransaction().add(R.id.fragment_content, topicDetailFragment).commit();

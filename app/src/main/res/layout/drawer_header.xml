@@ -1,9 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/header"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:minHeight="250dp"
-    android:background="@color/material_orange_500"
-    android:orientation="vertical">
+    android:background="@color/material_cyan_500"
+    android:clickable="true"
+    android:foreground="?android:selectableItemBackground"
+    android:minHeight="200dp"
+    android:orientation="vertical"
+    android:padding="5dp">
 
-</LinearLayout>
+
+    <ImageView
+        android:id="@+id/header_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_margin="10dp"
+        android:scaleType="fitCenter"
+        android:src="@mipmap/ic_launcher" />
+
+    <TextView
+        android:id="@+id/header_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toEndOf="@id/header_icon"
+        android:layout_toRightOf="@id/header_icon"
+        android:text="@string/login"
+        android:textColor="@color/material_cyan_50"
+        android:textSize="@dimen/material_title" />
+</RelativeLayout>

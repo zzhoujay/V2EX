@@ -39,7 +39,8 @@ public class DataManger {
                     if (o != null) {
                         //联网加载成功
                         provider.set(o);
-                        provider.persistence();
+                        if (provider.needCache())
+                            provider.persistence();
                     } else {
                         //联网加载失败
                         Z2EX.getInstance().toast(R.string.load_error);
@@ -49,7 +50,7 @@ public class DataManger {
                     }
                 }
             });
-        }else {
+        } else {
             if (onLoadComplete != null) {
                 onLoadComplete.loadComplete(null);
             }
@@ -88,7 +89,8 @@ public class DataManger {
                                 if (o != null) {
                                     //联网加载成功
                                     provider.set(o);
-                                    provider.persistence();
+                                    if (provider.needCache())
+                                        provider.persistence();
                                 } else {
                                     //联网加载失败
                                     Z2EX.getInstance().toast(R.string.load_error);

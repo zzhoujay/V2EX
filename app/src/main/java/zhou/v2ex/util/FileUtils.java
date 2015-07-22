@@ -9,6 +9,9 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by 州 on 2015/7/4 0004.
@@ -26,6 +29,11 @@ public class FileUtils {
      */
     public static boolean isFileExists(String path) {
         File file = new File(path);
+        return file.exists();
+    }
+
+    public static boolean isFileExists(File parent, String name) {
+        File file = new File(parent, name);
         return file.exists();
     }
 
@@ -155,6 +163,28 @@ public class FileUtils {
             return decimalFormat.format((float) size / 1024) + "KB";
         } else {
             return decimalFormat.format((float) size / (1024 * 1024)) + "MB";
+        }
+    }
+
+    public static boolean createFolder(File file, String name) {
+        if (file.exists()) {
+            File f = new File(file, name);
+            if (!f.exists()) {
+                return f.mkdirs();
+            }
+        }
+        return false;
+    }
+
+    public static void deleteSomeCache(File parent, String start, int maxSize) {
+        if(parent!=null){
+            File[] files = parent.listFiles(new FileNameFilter(start));
+            if (files != null && files.length > maxSize) {
+                Arrays.sort(files, new FileComparator());
+                for (int len = files.length, i = maxSize; i < len; i++) {
+                    files[i].delete();
+                }
+            }
         }
     }
 }

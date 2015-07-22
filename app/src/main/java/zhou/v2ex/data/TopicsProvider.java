@@ -62,7 +62,11 @@ public class TopicsProvider implements DataProvider<List<Topic>> {
         File file = new File(Z2EX.getInstance().getCacheDir(), topicType.fileName);
         List<Topic> ts = null;
         if (file.exists()) {
-            ts = (List<Topic>) FileUtils.readObject(file);
+            try {
+                ts = (List<Topic>) FileUtils.readObject(file);
+            } catch (Exception e) {
+                Log.d("getFromLocal", "TopicsProvider", e);
+            }
         }
         if (loadComplete != null) {
             loadComplete.loadComplete(ts);
@@ -123,6 +127,11 @@ public class TopicsProvider implements DataProvider<List<Topic>> {
     @Override
     public boolean hasLoad() {
         return topics != null;
+    }
+
+    @Override
+    public boolean needCache() {
+        return topicType == TopicType.HOT || topicType == TopicType.LATEST;
     }
 
     public static class TopicType implements Serializable, Parcelable {

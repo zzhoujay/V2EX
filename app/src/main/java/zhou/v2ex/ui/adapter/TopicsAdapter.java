@@ -56,6 +56,7 @@ public class TopicsAdapter extends RecyclerView.Adapter<TopicsAdapter.Holder> {
         holder.node.setText(topic.node.title);
         holder.user.setText(topic.member.username);
         holder.time.setText(TimeUtils.friendlyFormat(topic.created * 1000));
+        holder.reply.setText(String.format("%d个回复", topic.replies));
         Picasso.with(holder.icon.getContext()).load("http:" + topic.member.avatar_normal)
                 .placeholder(R.drawable.default_image).into(holder.icon);
     }
@@ -67,7 +68,7 @@ public class TopicsAdapter extends RecyclerView.Adapter<TopicsAdapter.Holder> {
 
     public static class Holder extends RecyclerView.ViewHolder {
 
-        public TextView title, node, user, time;
+        public TextView title, node, user, time, reply;
         public ImageView icon;
 
         private View parent;
@@ -81,6 +82,7 @@ public class TopicsAdapter extends RecyclerView.Adapter<TopicsAdapter.Holder> {
             user = (TextView) itemView.findViewById(R.id.item_topic_user);
             time = (TextView) itemView.findViewById(R.id.item_topic_time);
             icon = (ImageView) itemView.findViewById(R.id.item_topic_icon);
+            reply = (TextView) itemView.findViewById(R.id.item_topic_reply);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
