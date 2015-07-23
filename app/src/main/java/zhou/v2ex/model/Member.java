@@ -9,6 +9,10 @@ import java.io.Serializable;
  * Created by 州 on 2015/7/18 0018.
  */
 public class Member implements Serializable, Parcelable {
+
+    public static final String MEMBER = "member";
+    public static final String MEMBER_NAME = "member_name";
+
     public int id;
     public String username;
     public String website;

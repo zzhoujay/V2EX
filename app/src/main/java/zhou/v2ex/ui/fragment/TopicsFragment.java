@@ -57,10 +57,13 @@ public class TopicsFragment extends Fragment {
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(linearLayoutManager);
+        setUp(null);
         DataManger.getInstance().getData(topicType.fileName, new DataProvider.OnLoadComplete<List<Topic>>() {
             @Override
             public void loadComplete(List<Topic> topics) {
-                setUp(topics);
+                if (topics != null) {
+                    topicsAdapter.setTopics(topics);
+                }
             }
         });
         swipeRefreshLayout.setOnRefreshListener(onRefreshListener);
@@ -98,6 +101,10 @@ public class TopicsFragment extends Fragment {
             startActivity(intent);
         }
     };
+
+    public void setSwipeRefreshEnable(boolean enable) {
+        swipeRefreshLayout.setEnabled(enable);
+    }
 
     public static TopicsFragment newInstance(@NonNull TopicsProvider.TopicType topicType) {
         TopicsFragment topicsFragment = new TopicsFragment();

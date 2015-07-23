@@ -1,5 +1,7 @@
 package zhou.v2ex.ui.adapter;
 
+import android.content.Intent;
+import android.os.Parcelable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +14,10 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 import zhou.v2ex.R;
+import zhou.v2ex.interfaces.OnItemClickListener;
+import zhou.v2ex.model.Member;
 import zhou.v2ex.model.Replies;
+import zhou.v2ex.ui.activity.MemberActivity;
 import zhou.v2ex.ui.widget.RichText;
 import zhou.v2ex.util.ContentUtils;
 import zhou.v2ex.util.TimeUtils;
@@ -23,15 +28,27 @@ import zhou.v2ex.util.TimeUtils;
 public class RepliesAdapter extends RecyclerView.Adapter<RepliesAdapter.Holder> {
 
     private List<Replies> replies;
+    private OnItemClickListener iconClickCallback;
 
     public RepliesAdapter(List<Replies> replies) {
         this.replies = replies;
     }
 
+
+    private OnItemClickListener onIconClickListener = new OnItemClickListener() {
+        @Override
+        public void onItemClicked(View view, int position) {
+            if (iconClickCallback != null) {
+                iconClickCallback.onItemClicked(view, position);
+            }
+        }
+    };
+
     @Override
     public Holder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_replies, null);
         Holder holder = new Holder(view);
+        holder.setIconClickListener(onIconClickListener);
         return holder;
     }
 
@@ -58,6 +75,8 @@ public class RepliesAdapter extends RecyclerView.Adapter<RepliesAdapter.Holder> 
         public TextView user, time, floor;
         public RichText content;
 
+        private OnItemClickListener iconClickListener;
+
         public Holder(View itemView) {
             super(itemView);
             icon = (ImageView) itemView.findViewById(R.id.item_replies_icon);
@@ -65,11 +84,33 @@ public class RepliesAdapter extends RecyclerView.Adapter<RepliesAdapter.Holder> 
             time = (TextView) itemView.findViewById(R.id.item_replies_time);
             floor = (TextView) itemView.findViewById(R.id.item_replies_floor);
             content = (RichText) itemView.findViewById(R.id.item_replies_content);
+
+            icon.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (iconClickListener != null) {
+                        iconClickListener.onItemClicked(icon, getLayoutPosition());
+                        getAdapterPosition();
+                    }
+                }
+            });
         }
+
+        public void setIconClickListener(OnItemClickListener iconClickListener) {
+            this.iconClickListener = iconClickListener;
+        }
+    }
+
+    public Replies getItem(int position) {
+        return replies == null ? null : replies.get(position);
     }
 
     public void setReplies(List<Replies> replies) {
         this.replies = replies;
         notifyDataSetChanged();
+    }
+
+    public void setIconClickCallback(OnItemClickListener iconClickCallback) {
+        this.iconClickCallback = iconClickCallback;
     }
 }

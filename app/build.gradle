@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'oneapm'
 
 android {
     compileSdkVersion 22
@@ -22,6 +23,8 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile fileTree(dir:'E:\\Other SDK\\OneAPM_Android_Gradle_2.0.0\\agent',include:['*.jar'])
+
     compile 'com.android.support:appcompat-v7:22.2.0'
     compile 'com.android.support:design:22.2.0'
     compile 'com.android.support:cardview-v7:22.2.0'

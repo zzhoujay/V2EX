@@ -53,4 +53,8 @@ public class Z2EX extends Application {
         return false;
     }
 
+    public boolean isSelf(String username) {
+        return false;
+    }
+
 }

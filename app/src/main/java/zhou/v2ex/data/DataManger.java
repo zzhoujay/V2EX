@@ -17,7 +17,7 @@ public class DataManger {
 
     private DataManger() {
         providerMap = new HashMap<>();
-        restAdapter = new RestAdapter.Builder().setEndpoint("http://www.v2ex.com").build();
+        restAdapter = new RestAdapter.Builder().setEndpoint("http://v2ex.com").build();
     }
 
     private static DataManger dataManger;
@@ -108,7 +108,21 @@ public class DataManger {
 
     public <T> void addProvider(String key, DataProvider<T> provider) {
         if (provider != null && key != null)
-            providerMap.put(key, provider);
+            if(!providerMap.containsKey(key)){
+                providerMap.put(key, provider);
+            }
+    }
+
+    public <T> void addProvider(String key, DataProvider<T> provider, boolean flag) {
+        if (provider != null && key != null) {
+            if (flag) {
+                providerMap.put(key, provider);
+            } else {
+                if (!providerMap.containsKey(key)) {
+                    providerMap.put(key, provider);
+                }
+            }
+        }
     }
 
     public RestAdapter getRestAdapter() {

@@ -76,7 +76,7 @@ public class MemberProvider implements DataProvider<Member> {
 
     @Override
     public void getFromNet(final OnLoadComplete<Member> loadComplete) {
-        if (Z2EX.getInstance().isNetworkConnected()) {
+        if (!Z2EX.getInstance().isNetworkConnected()) {
             //网络未连接
             Z2EX.getInstance().toast(R.string.network_error);
             if (loadComplete != null) {

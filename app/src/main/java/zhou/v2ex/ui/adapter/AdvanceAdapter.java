@@ -47,6 +47,14 @@ public class AdvanceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         footers.remove(view);
     }
 
+    public int getHeaderSize() {
+        return headers.size();
+    }
+
+    public int getFooterSize() {
+        return footers.size();
+    }
+
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         int headCount = headers.size();

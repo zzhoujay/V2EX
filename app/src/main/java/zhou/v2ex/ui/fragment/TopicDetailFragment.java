@@ -1,6 +1,8 @@
 package zhou.v2ex.ui.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -22,9 +24,11 @@ import zhou.v2ex.data.DataManger;
 import zhou.v2ex.data.DataProvider;
 import zhou.v2ex.data.RepliesProvider;
 import zhou.v2ex.data.TopicProvider;
+import zhou.v2ex.interfaces.OnItemClickListener;
 import zhou.v2ex.model.Member;
 import zhou.v2ex.model.Replies;
 import zhou.v2ex.model.Topic;
+import zhou.v2ex.ui.activity.MemberActivity;
 import zhou.v2ex.ui.adapter.AdvanceAdapter;
 import zhou.v2ex.ui.adapter.RepliesAdapter;
 import zhou.v2ex.ui.widget.RichText;
@@ -46,6 +50,7 @@ public class TopicDetailFragment extends Fragment {
     private RepliesProvider repliesProvider;
     private TopicProvider topicProvider;
     private View detail;
+    private AdvanceAdapter advanceAdapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -111,7 +116,8 @@ public class TopicDetailFragment extends Fragment {
 
     private void setUp(List<Replies> replies) {
         repliesAdapter = new RepliesAdapter(replies);
-        AdvanceAdapter advanceAdapter = new AdvanceAdapter(repliesAdapter);
+        repliesAdapter.setIconClickCallback(onIconClickListener);
+        advanceAdapter = new AdvanceAdapter(repliesAdapter);
         advanceAdapter.addHeader(detail);
         recyclerView.setAdapter(advanceAdapter);
     }
@@ -138,6 +144,16 @@ public class TopicDetailFragment extends Fragment {
         @Override
         public void loadComplete(Topic topic) {
             initData(topic);
+        }
+    };
+
+    private OnItemClickListener onIconClickListener = new OnItemClickListener() {
+        @Override
+        public void onItemClicked(View view, int position) {
+            Replies reply = repliesAdapter.getItem(position - advanceAdapter.getHeaderSize());
+            Intent intent = new Intent(getActivity(), MemberActivity.class);
+            intent.putExtra(Member.MEMBER, (Parcelable) reply.member);
+            startActivity(intent);
         }
     };
 
