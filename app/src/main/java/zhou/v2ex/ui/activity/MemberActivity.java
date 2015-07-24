@@ -26,6 +26,7 @@ import zhou.v2ex.data.DataProvider;
 import zhou.v2ex.data.MemberProvider;
 import zhou.v2ex.data.TopicsProvider;
 import zhou.v2ex.model.Member;
+import zhou.v2ex.ui.fragment.ContentFragment;
 import zhou.v2ex.ui.fragment.TopicsFragment;
 
 /**
@@ -37,9 +38,9 @@ public class MemberActivity extends AppCompatActivity implements AppBarLayout.On
     private Member member;
     private ImageView icon;
     private TextView name;
-    private TopicsFragment[] fragments;
     private AppBarLayout appBarLayout;
     private MemberProvider memberProvider;
+    private TopicsFragment topicsFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,10 +69,6 @@ public class MemberActivity extends AppCompatActivity implements AppBarLayout.On
         }
 
 
-        fragments = new TopicsFragment[2];
-        fragments[0] = TopicsFragment.newInstance(TopicsProvider.TopicType.LATEST);
-        fragments[1] = TopicsFragment.newInstance(TopicsProvider.TopicType.HOT);
-
         initView();
 
 
@@ -88,43 +85,22 @@ public class MemberActivity extends AppCompatActivity implements AppBarLayout.On
 
     private void initData(Member member) {
         if (member != null) {
-            name.setText(member.username);
+//            name.setText(member.username);
+            collapsingToolbarLayout.setTitle(member.username);
             Picasso.with(this).load("http:" + member.avatar_large).placeholder(R.mipmap.ic_launcher)
                     .error(R.mipmap.ic_launcher).into(icon);
+            topicsFragment = TopicsFragment.newInstance(TopicsProvider.TopicType.newTopicTypeByUserName("member_topic_" + member.username, member.username));
+            getSupportFragmentManager().beginTransaction().add(R.id.member_fragment, topicsFragment).commit();
         }
     }
 
     private void initView() {
-        ViewPager viewPager = (ViewPager) findViewById(R.id.viewPager);
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabLayout);
         collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         appBarLayout = (AppBarLayout) findViewById(R.id.appBar);
         icon = (ImageView) findViewById(R.id.member_icon);
         name = (TextView) findViewById(R.id.member_name);
 
-        tabLayout.addTab(tabLayout.newTab().setText(R.string.tab1));
-        tabLayout.addTab(tabLayout.newTab().setText(R.string.tab2));
 
-        PagerAdapter adapter = new FragmentPagerAdapter(getSupportFragmentManager()) {
-            @Override
-            public Fragment getItem(int position) {
-                return fragments[position];
-            }
-
-            @Override
-            public int getCount() {
-                return fragments.length;
-            }
-
-            @Override
-            public CharSequence getPageTitle(int position) {
-                return getString(position == 0 ? R.string.tab1 : R.string.tab2);
-            }
-        };
-
-        viewPager.setAdapter(adapter);
-        tabLayout.setupWithViewPager(viewPager);
-        tabLayout.setTabsFromPagerAdapter(adapter);
     }
 
     private DataProvider.OnLoadComplete<Member> memberOnLoadComplete = new DataProvider.OnLoadComplete<Member>() {
@@ -146,8 +122,7 @@ public class MemberActivity extends AppCompatActivity implements AppBarLayout.On
 
     @Override
     public void onOffsetChanged(AppBarLayout appBarLayout, int i) {
-        fragments[0].setSwipeRefreshEnable(i == 0);
-        fragments[1].setSwipeRefreshEnable(i == 0);
+        topicsFragment.setSwipeRefreshEnable(i == 0);
     }
 
     @Override

@@ -61,7 +61,7 @@ public class TopicsFragment extends Fragment {
         DataManger.getInstance().getData(topicType.fileName, new DataProvider.OnLoadComplete<List<Topic>>() {
             @Override
             public void loadComplete(List<Topic> topics) {
-                if (topics != null) {
+                if (topics != null && topics.size() > 0) {
                     topicsAdapter.setTopics(topics);
                 }
             }
@@ -86,7 +86,7 @@ public class TopicsFragment extends Fragment {
     private DataProvider.OnLoadComplete<List<Topic>> refreshListener = new DataProvider.OnLoadComplete<List<Topic>>() {
         @Override
         public void loadComplete(List<Topic> topics) {
-            if (topics != null) {
+            if (topics != null && topics.size() > 0) {
                 topicsAdapter.setTopics(topics);
             }
             swipeRefreshLayout.setRefreshing(false);
