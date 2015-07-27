@@ -2,7 +2,6 @@ package zhou.v2ex.net;
 
 import android.os.Handler;
 import android.os.Looper;
-import android.os.NetworkOnMainThreadException;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -15,7 +14,6 @@ import java.io.IOException;
 import java.net.CookieManager;
 import java.net.CookiePolicy;
 
-import zhou.v2ex.Z2EX;
 import zhou.v2ex.interfaces.OnLoadCompleteListener;
 
 /**
@@ -33,6 +31,7 @@ public class NetworkManager {
         manager.setCookiePolicy(CookiePolicy.ACCEPT_ALL);
         client.setCookieHandler(manager);
         client.setFollowRedirects(false);
+        client.getCookieHandler();
         mainHandler = new Handler(Looper.getMainLooper());
     }
 

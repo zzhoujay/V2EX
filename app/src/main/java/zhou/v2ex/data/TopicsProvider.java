@@ -13,7 +13,7 @@ import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 import zhou.v2ex.R;
-import zhou.v2ex.Z2EX;
+import zhou.v2ex.V2EX;
 import zhou.v2ex.interfaces.OnLoadCompleteListener;
 import zhou.v2ex.interfaces.TopicsService;
 import zhou.v2ex.model.Topic;
@@ -42,7 +42,7 @@ public class TopicsProvider implements DataProvider<List<Topic>> {
         new Thread() {
             @Override
             public void run() {
-                File file = new File(Z2EX.getInstance().getCacheDir(), topicType.fileName);
+                File file = new File(V2EX.getInstance().getCacheDir(), topicType.fileName);
                 FileUtils.writeObject(file, topics);
             }
         }.start();
@@ -60,7 +60,7 @@ public class TopicsProvider implements DataProvider<List<Topic>> {
 
     @Override
     public void getFromLocal(OnLoadCompleteListener<List<Topic>> loadComplete) {
-        File file = new File(Z2EX.getInstance().getCacheDir(), topicType.fileName);
+        File file = new File(V2EX.getInstance().getCacheDir(), topicType.fileName);
         List<Topic> ts = null;
         if (file.exists()) {
             try {
@@ -77,9 +77,9 @@ public class TopicsProvider implements DataProvider<List<Topic>> {
 
     @Override
     public void getFromNet(final OnLoadCompleteListener<List<Topic>> loadComplete) {
-        if (!Z2EX.getInstance().isNetworkConnected()) {
+        if (!V2EX.getInstance().isNetworkConnected()) {
             //网络未连接
-            Z2EX.getInstance().toast(R.string.network_error);
+            V2EX.getInstance().toast(R.string.network_error);
             if (loadComplete != null) {
                 loadComplete.loadComplete(null);
             }
@@ -116,7 +116,7 @@ public class TopicsProvider implements DataProvider<List<Topic>> {
             } else if (topicType.nodeId != -1) {//通过节点ID查找
                 topicsService.getTopicByNodeId(topicType.nodeId, callback);
             } else {//异常情况
-                Z2EX.getInstance().toast(R.string.unknown_error);
+                V2EX.getInstance().toast(R.string.unknown_error);
                 if (loadComplete != null) {
                     loadComplete.loadComplete(null);
                 }

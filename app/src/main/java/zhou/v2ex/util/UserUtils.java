@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import zhou.v2ex.Z2EX;
+import zhou.v2ex.V2EX;
 import zhou.v2ex.interfaces.OnLoadCompleteListener;
 import zhou.v2ex.model.Node;
 import zhou.v2ex.net.NetworkManager;
@@ -37,10 +37,10 @@ public class UserUtils {
                             .add("next", "/")
                             .build();
                     Request request = NetworkManager.getInstance().requestBuilder()
-                            .addHeader("Origin", Z2EX.SINGIN_URL)
+                            .addHeader("Origin", V2EX.SINGIN_URL)
                             .addHeader("Referer", "http://v2ex.com/signin")
                             .addHeader("Content-Type", "application/x-www-form-urlencoded")
-                            .url(Z2EX.SINGIN_URL)
+                            .url(V2EX.SINGIN_URL)
                             .post(body)
                             .build();
                     NetworkManager.getInstance().request(request, new Callback() {
@@ -70,7 +70,7 @@ public class UserUtils {
 
     public static void getOnce(@NonNull final OnLoadCompleteListener<String> loadCompleteListener) {
         Request.Builder builder = NetworkManager.getInstance().requestBuilder();
-        Request request = builder.url(Z2EX.SINGIN_URL).get().build();
+        Request request = builder.url(V2EX.SINGIN_URL).get().build();
         NetworkManager.getInstance().requestString(request, new OnLoadCompleteListener<String>() {
             @Override
             public void loadComplete(String s) {
@@ -100,14 +100,14 @@ public class UserUtils {
             if (node.url.startsWith("//"))
                 node.url = "http:" + node.url;
             else
-                node.url = Z2EX.SITE_URL + node.url;
+                node.url = V2EX.SITE_URL + node.url;
             collections.add(node);
         }
         return collections;
     }
 
     public static void replyTopic(int topicId, final String content, @NonNull final OnLoadCompleteListener<Boolean> loadCompleteListener) {
-        final String url = Z2EX.SITE_URL + "/t/" + topicId;
+        final String url = V2EX.SITE_URL + "/t/" + topicId;
         getOnce(new OnLoadCompleteListener<String>() {
             @Override
             public void loadComplete(String s) {
@@ -117,7 +117,7 @@ public class UserUtils {
                             .add("once", s)
                             .build();
                     Request request = NetworkManager.getInstance().requestBuilder()
-                            .addHeader("Origin", Z2EX.SITE_URL)
+                            .addHeader("Origin", V2EX.SITE_URL)
                             .addHeader("Referer", url)
                             .addHeader("Content-Type", "application/x-www-form-urlencoded")
                             .post(body)
@@ -151,7 +151,7 @@ public class UserUtils {
 
 
     public static void createTopic(String nodeName, final String title, final String content, @NonNull final OnLoadCompleteListener<Boolean> onLoadCompleteListener) {
-        final String url = Z2EX.SITE_URL + "/new/" + nodeName;
+        final String url = V2EX.SITE_URL + "/new/" + nodeName;
         getOnce(new OnLoadCompleteListener<String>() {
             @Override
             public void loadComplete(String s) {
@@ -162,7 +162,7 @@ public class UserUtils {
                             .add("content", content)
                             .build();
                     Request request = NetworkManager.getInstance().requestBuilder()
-                            .addHeader("Origin", Z2EX.SITE_URL)
+                            .addHeader("Origin", V2EX.SITE_URL)
                             .addHeader("Referer", url)
                             .addHeader("Content-Type", "application/x-www-form-urlencoded")
                             .post(body)
@@ -194,9 +194,9 @@ public class UserUtils {
     }
 
     public static void collectionNode(String node, final OnLoadCompleteListener<Boolean> onLoadCompleteListener) {
-        String url = Z2EX.SITE_URL + "/go/" + node;
+        String url = V2EX.SITE_URL + "/go/" + node;
         Request request = NetworkManager.getInstance().requestBuilder()
-                .addHeader("Referer", Z2EX.SITE_URL)
+                .addHeader("Referer", V2EX.SITE_URL)
                 .addHeader("Content-Type", "application/x-www-form-urlencoded")
                 .url(url)
                 .get()
@@ -213,9 +213,9 @@ public class UserUtils {
                     if (!u.isEmpty()) {
                         boolean flag = u.contains("unfavorite");
                         Request r = NetworkManager.getInstance().requestBuilder()
-                                .addHeader("Referer", Z2EX.SITE_URL)
+                                .addHeader("Referer", V2EX.SITE_URL)
                                 .addHeader("Content-Type", "application/x-www-form-urlencoded")
-                                .url(Z2EX.SITE_URL + u)
+                                .url(V2EX.SITE_URL + u)
                                 .get()
                                 .build();
                         NetworkManager.getInstance().request(r, new Callback() {
@@ -276,9 +276,9 @@ public class UserUtils {
     }
 
     public static void collectionTopic(int topicId, final OnLoadCompleteListener<Boolean> onLoadCompleteListener) {
-        String url = Z2EX.SITE_URL + "/t/" + topicId;
+        String url = V2EX.SITE_URL + "/t/" + topicId;
         Request request = NetworkManager.getInstance().requestBuilder()
-                .addHeader("Referer", Z2EX.SITE_URL)
+                .addHeader("Referer", V2EX.SITE_URL)
                 .addHeader("Content-Type", "application/x-www-form-urlencoded")
                 .url(url)
                 .get()
@@ -292,9 +292,9 @@ public class UserUtils {
                     if (!u.isEmpty()) {
                         u = u.replace("\" class=\"tb", "");
                         Request r = NetworkManager.getInstance().requestBuilder()
-                                .addHeader("Referer", Z2EX.SITE_URL)
+                                .addHeader("Referer", V2EX.SITE_URL)
                                 .addHeader("Content-Type", "application/x-www-form-urlencoded")
-                                .url(Z2EX.SITE_URL + u)
+                                .url(V2EX.SITE_URL + u)
                                 .get()
                                 .build();
                         NetworkManager.getInstance().request(r, new Callback() {

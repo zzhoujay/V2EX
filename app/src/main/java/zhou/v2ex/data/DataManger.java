@@ -5,7 +5,7 @@ import java.util.Map;
 
 import retrofit.RestAdapter;
 import zhou.v2ex.R;
-import zhou.v2ex.Z2EX;
+import zhou.v2ex.V2EX;
 import zhou.v2ex.interfaces.OnLoadCompleteListener;
 
 /**
@@ -45,7 +45,7 @@ public class DataManger {
                             provider.persistence();
                     } else {
                         //联网加载失败
-                        Z2EX.getInstance().toast(R.string.load_error);
+                        V2EX.getInstance().toast(R.string.load_error);
                     }
                     if (onLoadComplete != null) {
                         onLoadComplete.loadComplete(o);
@@ -96,7 +96,7 @@ public class DataManger {
                                         provider.persistence();
                                 } else {
                                     //联网加载失败
-                                    Z2EX.getInstance().toast(R.string.load_error);
+                                    V2EX.getInstance().toast(R.string.load_error);
                                 }
                                 if (onLoadComplete != null) {
                                     onLoadComplete.loadComplete(o);

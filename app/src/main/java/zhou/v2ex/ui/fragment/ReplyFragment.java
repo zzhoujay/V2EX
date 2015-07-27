@@ -10,7 +10,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 
 import zhou.v2ex.R;
-import zhou.v2ex.Z2EX;
+import zhou.v2ex.V2EX;
 import zhou.v2ex.interfaces.OnLoadCompleteListener;
 import zhou.v2ex.model.Topic;
 import zhou.v2ex.util.UserUtils;
@@ -49,23 +49,23 @@ public class ReplyFragment extends Fragment {
         public void onClick(View v) {
             String content = editText.getText().toString();
             if (content.isEmpty()) {
-                Z2EX.getInstance().toast(R.string.empty_reply);
+                V2EX.getInstance().toast(R.string.empty_reply);
             } else {
-                if (!Z2EX.getInstance().isNetworkConnected()) {
-                    Z2EX.getInstance().toast(R.string.network_error);
+                if (!V2EX.getInstance().isNetworkConnected()) {
+                    V2EX.getInstance().toast(R.string.network_error);
                 } else {
                     if (topic != null) {
                         UserUtils.replyTopic(topic.id, content, new OnLoadCompleteListener<Boolean>() {
                             @Override
                             public void loadComplete(Boolean aBoolean) {
                                 if (aBoolean) {
-                                    Z2EX.getInstance().toast(R.string.reply_success);
+                                    V2EX.getInstance().toast(R.string.reply_success);
                                     editText.setText("");
                                     if (onReplySuccessListener != null) {
                                         onReplySuccessListener.replySuccess();
                                     }
                                 } else {
-                                    Z2EX.getInstance().toast(R.string.reply_error);
+                                    V2EX.getInstance().toast(R.string.reply_error);
                                 }
                             }
                         });

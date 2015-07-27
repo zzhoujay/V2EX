@@ -143,7 +143,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        Member user = Z2EX.getInstance().getSelf();
+        Member user = V2EX.getInstance().getSelf();
         if (user != null) {
             setUserInfo(user);
             name.setOnClickListener(userInfoListener);
@@ -164,7 +164,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
             Intent intent = new Intent(MainActivity.this, MemberActivity.class);
-            intent.putExtra(Member.MEMBER, (Parcelable) Z2EX.getInstance().getSelf());
+            intent.putExtra(Member.MEMBER, (Parcelable) V2EX.getInstance().getSelf());
             startActivity(intent);
         }
     };

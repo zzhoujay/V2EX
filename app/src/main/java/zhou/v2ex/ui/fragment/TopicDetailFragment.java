@@ -161,6 +161,14 @@ public class TopicDetailFragment extends Fragment {
         DataManger.getInstance().refresh(topicProvider.FILE_NAME, topicOnLoadComplete);
     }
 
+    public void scrollToBottem() {
+        recyclerView.scrollToPosition(advanceAdapter.getItemCount() - 1);
+    }
+
+    public void scrollToTop() {
+        recyclerView.scrollToPosition(0);
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();

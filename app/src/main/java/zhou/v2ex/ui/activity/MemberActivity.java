@@ -15,7 +15,7 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
 import zhou.v2ex.R;
-import zhou.v2ex.Z2EX;
+import zhou.v2ex.V2EX;
 import zhou.v2ex.data.DataManger;
 import zhou.v2ex.data.MemberProvider;
 import zhou.v2ex.data.TopicsProvider;
@@ -68,7 +68,7 @@ public class MemberActivity extends AppCompatActivity implements AppBarLayout.On
 
         if (username != null) {
             memberProvider = new MemberProvider(DataManger.getInstance().getRestAdapter()
-                    , username, Z2EX.getInstance().isSelf(username));
+                    , username, V2EX.getInstance().isSelf(username));
             DataManger.getInstance().addProvider(memberProvider.FILE_NAME, memberProvider);
             DataManger.getInstance().getData(memberProvider.FILE_NAME, memberOnLoadComplete);
         } else if (member != null) {
@@ -134,7 +134,7 @@ public class MemberActivity extends AppCompatActivity implements AppBarLayout.On
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (member != null && memberProvider != null && Z2EX.getInstance().isSelf(member.username)) {
+        if (member != null && memberProvider != null && V2EX.getInstance().isSelf(member.username)) {
             DataManger.getInstance().removeProvider(memberProvider.FILE_NAME);
         }
     }

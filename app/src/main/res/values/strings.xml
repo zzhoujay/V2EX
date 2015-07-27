@@ -25,4 +25,5 @@
     <string name="empty_reply">回复不能为空</string>
     <string name="reply_success">回复成功</string>
     <string name="reply_error">回复失败</string>
+    <string name="reply_hit">请输入评论内容</string>
 </resources>

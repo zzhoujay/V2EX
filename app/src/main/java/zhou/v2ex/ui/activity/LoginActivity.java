@@ -14,7 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import zhou.v2ex.R;
-import zhou.v2ex.Z2EX;
+import zhou.v2ex.V2EX;
 import zhou.v2ex.data.DataManger;
 import zhou.v2ex.data.MemberProvider;
 import zhou.v2ex.interfaces.OnLoadCompleteListener;
@@ -67,10 +67,10 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void loadComplete(Boolean aBoolean) {
                         if (aBoolean) {
-                            Z2EX.getInstance().toast(R.string.login_success);
+                            V2EX.getInstance().toast(R.string.login_success);
                             getUserInfo(usernameStr);
                         } else {
-                            Z2EX.getInstance().toast(R.string.login_error);
+                            V2EX.getInstance().toast(R.string.login_error);
                         }
                         progressDialog.dismiss();
                     }
@@ -92,7 +92,7 @@ public class LoginActivity extends AppCompatActivity {
     private OnLoadCompleteListener<Member> onLoadListener = new OnLoadCompleteListener<Member>() {
         @Override
         public void loadComplete(Member member) {
-            Z2EX.getInstance().setSelf(member);
+            V2EX.getInstance().setSelf(member);
             progressDialogUserInfo.dismiss();
             Intent intent = new Intent(LoginActivity.this, MemberActivity.class);
             intent.putExtra(Member.MEMBER, (Parcelable) member);

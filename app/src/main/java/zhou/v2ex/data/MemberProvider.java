@@ -9,7 +9,7 @@ import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 import zhou.v2ex.R;
-import zhou.v2ex.Z2EX;
+import zhou.v2ex.V2EX;
 import zhou.v2ex.interfaces.MemberService;
 import zhou.v2ex.interfaces.OnLoadCompleteListener;
 import zhou.v2ex.model.Member;
@@ -42,7 +42,7 @@ public class MemberProvider implements DataProvider<Member> {
             new Thread() {
                 @Override
                 public void run() {
-                    File file = new File(Z2EX.getInstance().getCacheDir(), FILE_NAME);
+                    File file = new File(V2EX.getInstance().getCacheDir(), FILE_NAME);
                     FileUtils.writeObject(file, member);
                 }
             }.start();
@@ -61,7 +61,7 @@ public class MemberProvider implements DataProvider<Member> {
 
     @Override
     public void getFromLocal(OnLoadCompleteListener<Member> loadComplete) {
-        File file = new File(Z2EX.getInstance().getCacheDir(), FILE_NAME);
+        File file = new File(V2EX.getInstance().getCacheDir(), FILE_NAME);
         Member m = null;
         if (file.exists()) {
             try {
@@ -77,9 +77,9 @@ public class MemberProvider implements DataProvider<Member> {
 
     @Override
     public void getFromNet(final OnLoadCompleteListener<Member> loadComplete) {
-        if (!Z2EX.getInstance().isNetworkConnected()) {
+        if (!V2EX.getInstance().isNetworkConnected()) {
             //网络未连接
-            Z2EX.getInstance().toast(R.string.network_error);
+            V2EX.getInstance().toast(R.string.network_error);
             if (loadComplete != null) {
                 loadComplete.loadComplete(null);
             }
@@ -111,6 +111,19 @@ public class MemberProvider implements DataProvider<Member> {
 
     @Override
     public boolean needCache() {
-        return isSelf || Z2EX.getInstance().saveCache();
+        return isSelf || V2EX.getInstance().saveCache();
+    }
+
+    public static Member getSelf() {
+        File file = new File(V2EX.getInstance().getCacheDir(), SElF);
+        Member self = null;
+        if (file.exists()) {
+            try {
+                self = (Member) FileUtils.readObject(file);
+            } catch (Exception e) {
+                Log.d("getSelf", "error", e);
+            }
+        }
+        return self;
     }
 }

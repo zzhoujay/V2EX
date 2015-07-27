@@ -5,12 +5,13 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.widget.Toast;
 
+import zhou.v2ex.data.MemberProvider;
 import zhou.v2ex.model.Member;
 
 /**
  * Created by 州 on 2015/7/18 0018.
  */
-public class Z2EX extends Application {
+public class V2EX extends Application {
 
     public static final String HOT_TOPIC_NAME = "hot.cache";
     public static final String LATEST_TOPIC_NAME = "latest.cache";
@@ -20,7 +21,7 @@ public class Z2EX extends Application {
     public static final String SITE_URL = "http://v2ex.com";
 
 
-    private static Z2EX z2EX;
+    private static V2EX v2EX;
 
     private Member self;
     private boolean isLogin;
@@ -28,11 +29,12 @@ public class Z2EX extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        z2EX = this;
+        v2EX = this;
+        setSelf(MemberProvider.getSelf());
     }
 
-    public static Z2EX getInstance() {
-        return z2EX;
+    public static V2EX getInstance() {
+        return v2EX;
     }
 
     public boolean isNetworkConnected() {

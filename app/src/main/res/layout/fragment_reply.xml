@@ -1,21 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="horizontal">
+    android:layout_height="wrap_content"
+    android:paddingEnd="4dp"
+    android:paddingLeft="4dp"
+    android:paddingRight="4dp"
+    android:paddingStart="4dp">
 
-    <EditText
-        android:id="@+id/reply_content"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:maxLines="1" />
+    <View
+        android:id="@+id/gap"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_alignParentTop="true"
+        android:background="@color/material_grey_200" />
 
     <ImageButton
         android:id="@+id/reply_btn"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/gap"
         android:background="@drawable/image_btn_bg"
         android:scaleType="centerInside"
         android:src="@drawable/ic_send_grey" />
-</LinearLayout>
+
+    <EditText
+        android:id="@+id/reply_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@id/gap"
+        android:layout_toLeftOf="@id/reply_btn"
+        android:layout_toStartOf="@id/reply_btn"
+        android:hint="@string/reply_hit"
+        android:maxLines="1" />
+
+
+</RelativeLayout>

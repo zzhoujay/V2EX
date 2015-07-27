@@ -10,7 +10,7 @@ import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 import zhou.v2ex.R;
-import zhou.v2ex.Z2EX;
+import zhou.v2ex.V2EX;
 import zhou.v2ex.interfaces.OnLoadCompleteListener;
 import zhou.v2ex.interfaces.RepliesService;
 import zhou.v2ex.model.Replies;
@@ -42,7 +42,7 @@ public class RepliesProvider implements DataProvider<List<Replies>> {
         new Thread() {
             @Override
             public void run() {
-                File file = new File(Z2EX.getInstance().getCacheDir(), FILE_NAME);
+                File file = new File(V2EX.getInstance().getCacheDir(), FILE_NAME);
                 FileUtils.writeObject(file, replies);
             }
         }.start();
@@ -60,7 +60,7 @@ public class RepliesProvider implements DataProvider<List<Replies>> {
 
     @Override
     public void getFromLocal(OnLoadCompleteListener<List<Replies>> loadComplete) {
-        File file = new File(Z2EX.getInstance().getCacheDir(), FILE_NAME);
+        File file = new File(V2EX.getInstance().getCacheDir(), FILE_NAME);
         List<Replies> rs = null;
         if (file.exists()) {
             try {
@@ -76,9 +76,9 @@ public class RepliesProvider implements DataProvider<List<Replies>> {
 
     @Override
     public void getFromNet(final OnLoadCompleteListener<List<Replies>> loadComplete) {
-        if (!Z2EX.getInstance().isNetworkConnected()) {
+        if (!V2EX.getInstance().isNetworkConnected()) {
             //网络未连接
-            Z2EX.getInstance().toast(R.string.network_error);
+            V2EX.getInstance().toast(R.string.network_error);
             if (loadComplete != null) {
                 loadComplete.loadComplete(null);
             }
@@ -110,7 +110,7 @@ public class RepliesProvider implements DataProvider<List<Replies>> {
 
     @Override
     public boolean needCache() {
-        return Z2EX.getInstance().saveCache();
+        return V2EX.getInstance().saveCache();
     }
 
 }
