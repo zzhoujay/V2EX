@@ -16,4 +16,13 @@
     <string name="topic">主题</string>
     <string name="node">节点</string>
     <string name="empty_topic">没有相关话题</string>
+    <string name="login_username">请输入用户名</string>
+    <string name="signin">登录</string>
+    <string name="signin_progress">登录中</string>
+    <string name="login_error">登录失败</string>
+    <string name="login_success">登录成功</string>
+    <string name="get_user_info">获取用户信息</string>
+    <string name="empty_reply">回复不能为空</string>
+    <string name="reply_success">回复成功</string>
+    <string name="reply_error">回复失败</string>
 </resources>

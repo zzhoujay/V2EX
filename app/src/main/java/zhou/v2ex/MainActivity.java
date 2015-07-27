@@ -2,6 +2,7 @@ package zhou.v2ex;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -18,12 +19,13 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.blueware.agent.android.BlueWare;
+//import com.blueware.agent.android.BlueWare;
 import com.squareup.picasso.Picasso;
 
 import zhou.v2ex.data.DataManger;
 import zhou.v2ex.data.TopicsProvider;
 import zhou.v2ex.model.Member;
+import zhou.v2ex.ui.activity.LoginActivity;
 import zhou.v2ex.ui.activity.MemberActivity;
 import zhou.v2ex.ui.activity.NodesActivity;
 import zhou.v2ex.ui.fragment.TopicsFragment;
@@ -46,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        BlueWare.withApplicationToken("36DF853CC86E94516EC02E282C2DF70809").start(this.getApplication());
+//        BlueWare.withApplicationToken("36DF853CC86E94516EC02E282C2DF70809").start(this.getApplication());
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolBar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
@@ -84,13 +86,6 @@ public class MainActivity extends AppCompatActivity {
                         return true;
                 }
                 return false;
-            }
-        });
-        name.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, MemberActivity.class);
-                startActivity(intent);
             }
         });
     }
@@ -144,6 +139,35 @@ public class MainActivity extends AppCompatActivity {
         Picasso.with(this).load("http:" + member.avatar_large).placeholder(R.mipmap.ic_launcher)
                 .error(R.mipmap.ic_launcher).into(icon);
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Member user = Z2EX.getInstance().getSelf();
+        if (user != null) {
+            setUserInfo(user);
+            name.setOnClickListener(userInfoListener);
+        } else {
+            name.setOnClickListener(loginListener);
+        }
+    }
+
+    private View.OnClickListener loginListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+            startActivity(intent);
+        }
+    };
+
+    private View.OnClickListener userInfoListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Intent intent = new Intent(MainActivity.this, MemberActivity.class);
+            intent.putExtra(Member.MEMBER, (Parcelable) Z2EX.getInstance().getSelf());
+            startActivity(intent);
+        }
+    };
 
     @Override
     protected void onDestroy() {

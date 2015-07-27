@@ -8,7 +8,9 @@ import android.util.Log;
 import android.view.MenuItem;
 
 import zhou.v2ex.R;
+import zhou.v2ex.Z2EX;
 import zhou.v2ex.model.Topic;
+import zhou.v2ex.ui.fragment.ReplyFragment;
 import zhou.v2ex.ui.fragment.TopicDetailFragment;
 
 /**
@@ -32,8 +34,18 @@ public class TopicDetailActivity extends AppCompatActivity {
         if (intent.hasExtra(Topic.TOPIC)) {
             Log.i("TopicDetailActivity", "has");
             Topic topic = intent.getParcelableExtra(Topic.TOPIC);
-            TopicDetailFragment topicDetailFragment = TopicDetailFragment.newInstance(topic);
+            final TopicDetailFragment topicDetailFragment = TopicDetailFragment.newInstance(topic);
             getSupportFragmentManager().beginTransaction().add(R.id.fragment_content, topicDetailFragment).commit();
+            if (Z2EX.getInstance().isLogin()) {
+                ReplyFragment replyFragment = ReplyFragment.newInstance(topic);
+                replyFragment.setOnReplySuccessListener(new ReplyFragment.OnReplySuccessListener() {
+                    @Override
+                    public void replySuccess() {
+                        topicDetailFragment.refresh();
+                    }
+                });
+                getSupportFragmentManager().beginTransaction().add(R.id.fragment_bottom, replyFragment).commit();
+            }
         }
     }
 

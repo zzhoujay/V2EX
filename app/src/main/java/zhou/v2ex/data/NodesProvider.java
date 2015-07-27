@@ -12,6 +12,7 @@ import retrofit.client.Response;
 import zhou.v2ex.R;
 import zhou.v2ex.Z2EX;
 import zhou.v2ex.interfaces.NodesService;
+import zhou.v2ex.interfaces.OnLoadCompleteListener;
 import zhou.v2ex.model.Node;
 import zhou.v2ex.util.FileUtils;
 
@@ -54,7 +55,7 @@ public class NodesProvider implements DataProvider<List<Node>> {
     }
 
     @Override
-    public void getFromLocal(OnLoadComplete<List<Node>> loadComplete) {
+    public void getFromLocal(OnLoadCompleteListener<List<Node>> loadComplete) {
         File file = new File(Z2EX.getInstance().getCacheDir(), FILE_NAME);
         List<Node> ns = null;
         if (file.exists()) {
@@ -70,7 +71,7 @@ public class NodesProvider implements DataProvider<List<Node>> {
     }
 
     @Override
-    public void getFromNet(final OnLoadComplete<List<Node>> loadComplete) {
+    public void getFromNet(final OnLoadCompleteListener<List<Node>> loadComplete) {
         if (!Z2EX.getInstance().isNetworkConnected()) {
             //网络未连接
             Z2EX.getInstance().toast(R.string.network_error);

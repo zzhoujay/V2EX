@@ -21,19 +21,19 @@ import java.util.List;
 
 import zhou.v2ex.R;
 import zhou.v2ex.data.DataManger;
-import zhou.v2ex.data.DataProvider;
 import zhou.v2ex.data.RepliesProvider;
 import zhou.v2ex.data.TopicProvider;
 import zhou.v2ex.interfaces.OnItemClickListener;
+import zhou.v2ex.interfaces.OnLoadCompleteListener;
 import zhou.v2ex.model.Member;
 import zhou.v2ex.model.Replies;
 import zhou.v2ex.model.Topic;
 import zhou.v2ex.ui.activity.MemberActivity;
-import zhou.v2ex.ui.adapter.AdvanceAdapter;
 import zhou.v2ex.ui.adapter.RepliesAdapter;
 import zhou.v2ex.ui.widget.RichText;
 import zhou.v2ex.util.ContentUtils;
 import zhou.v2ex.util.TimeUtils;
+import zhou.widget.AdvanceAdapter;
 
 /**
  * Created by 州 on 2015/7/20 0020.
@@ -80,7 +80,7 @@ public class TopicDetailFragment extends Fragment {
         setUp(null);
         swipeRefreshLayout.setRefreshing(true);
         swipeRefreshLayout.setOnRefreshListener(onRefreshListener);
-        DataManger.getInstance().getData(repliesProvider.FILE_NAME, new DataProvider.OnLoadComplete<List<Replies>>() {
+        DataManger.getInstance().getData(repliesProvider.FILE_NAME, new OnLoadCompleteListener<List<Replies>>() {
             @Override
             public void loadComplete(List<Replies> replies) {
                 repliesAdapter.setReplies(replies);
@@ -125,12 +125,11 @@ public class TopicDetailFragment extends Fragment {
     private SwipeRefreshLayout.OnRefreshListener onRefreshListener = new SwipeRefreshLayout.OnRefreshListener() {
         @Override
         public void onRefresh() {
-            DataManger.getInstance().refresh(repliesProvider.FILE_NAME, onLoadComplete);
-            DataManger.getInstance().refresh(topicProvider.FILE_NAME, topicOnLoadComplete);
+            refresh();
         }
     };
 
-    private DataProvider.OnLoadComplete<List<Replies>> onLoadComplete = new DataProvider.OnLoadComplete<List<Replies>>() {
+    private OnLoadCompleteListener<List<Replies>> onLoadComplete = new OnLoadCompleteListener<List<Replies>>() {
         @Override
         public void loadComplete(List<Replies> replies) {
             if (replies != null) {
@@ -140,7 +139,7 @@ public class TopicDetailFragment extends Fragment {
         }
     };
 
-    private DataProvider.OnLoadComplete<Topic> topicOnLoadComplete = new DataProvider.OnLoadComplete<Topic>() {
+    private OnLoadCompleteListener<Topic> topicOnLoadComplete = new OnLoadCompleteListener<Topic>() {
         @Override
         public void loadComplete(Topic topic) {
             initData(topic);
@@ -157,6 +156,11 @@ public class TopicDetailFragment extends Fragment {
         }
     };
 
+    public void refresh() {
+        DataManger.getInstance().refresh(repliesProvider.FILE_NAME, onLoadComplete);
+        DataManger.getInstance().refresh(topicProvider.FILE_NAME, topicOnLoadComplete);
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -170,4 +174,5 @@ public class TopicDetailFragment extends Fragment {
         topicDetailFragment.setArguments(bundle);
         return topicDetailFragment;
     }
+
 }

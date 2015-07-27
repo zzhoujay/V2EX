@@ -6,6 +6,7 @@ import java.util.Map;
 import retrofit.RestAdapter;
 import zhou.v2ex.R;
 import zhou.v2ex.Z2EX;
+import zhou.v2ex.interfaces.OnLoadCompleteListener;
 
 /**
  * Created by 州 on 2015/7/20 0020.
@@ -29,13 +30,14 @@ public class DataManger {
         return dataManger;
     }
 
-    public void refresh(String key, final DataProvider.OnLoadComplete onLoadComplete) {
-        final DataProvider provider = providerMap.get(key);
+    @SuppressWarnings("unchecked")
+    public <T> void refresh(String key, final OnLoadCompleteListener<T> onLoadComplete) {
+        final DataProvider<T> provider = providerMap.get(key);
         if (provider != null) {
             //进行联网加载
-            provider.getFromNet(new DataProvider.OnLoadComplete() {
+            provider.getFromNet(new OnLoadCompleteListener<T>() {
                 @Override
-                public void loadComplete(Object o) {
+                public void loadComplete(T o) {
                     if (o != null) {
                         //联网加载成功
                         provider.set(o);
@@ -57,8 +59,9 @@ public class DataManger {
         }
     }
 
-    public void getData(String key, final DataProvider.OnLoadComplete onLoadComplete) {
-        final DataProvider provider = providerMap.get(key);
+    @SuppressWarnings("unchecked")
+    public <T> void getData(String key, final OnLoadCompleteListener<T> onLoadComplete) {
+        final DataProvider<T> provider = providerMap.get(key);
         if (provider == null) {
             if (onLoadComplete != null) {
                 onLoadComplete.loadComplete(null);
@@ -72,9 +75,9 @@ public class DataManger {
             }
         } else {
             //未加载到内存
-            provider.getFromLocal(new DataProvider.OnLoadComplete() {
+            provider.getFromLocal(new OnLoadCompleteListener<T>() {
                 @Override
-                public void loadComplete(Object o) {
+                public void loadComplete(T o) {
                     if (o != null) {
                         //从本地加载到了
                         provider.set(o);
@@ -83,9 +86,9 @@ public class DataManger {
                         }
                     } else {
                         //本地没有缓存，联网加载
-                        provider.getFromNet(new DataProvider.OnLoadComplete() {
+                        provider.getFromNet(new OnLoadCompleteListener<T>() {
                             @Override
-                            public void loadComplete(Object o) {
+                            public void loadComplete(T o) {
                                 if (o != null) {
                                     //联网加载成功
                                     provider.set(o);
@@ -108,7 +111,7 @@ public class DataManger {
 
     public <T> void addProvider(String key, DataProvider<T> provider) {
         if (provider != null && key != null)
-            if(!providerMap.containsKey(key)){
+            if (!providerMap.containsKey(key)) {
                 providerMap.put(key, provider);
             }
     }

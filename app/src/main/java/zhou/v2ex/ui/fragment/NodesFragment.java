@@ -6,8 +6,6 @@ import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
@@ -18,9 +16,9 @@ import java.util.List;
 
 import zhou.v2ex.R;
 import zhou.v2ex.data.DataManger;
-import zhou.v2ex.data.DataProvider;
 import zhou.v2ex.data.NodesProvider;
 import zhou.v2ex.interfaces.ClickCallback;
+import zhou.v2ex.interfaces.OnLoadCompleteListener;
 import zhou.v2ex.model.Node;
 import zhou.v2ex.ui.activity.NodeActivity;
 import zhou.v2ex.ui.adapter.NodesAdapter;
@@ -49,7 +47,7 @@ public class NodesFragment extends Fragment {
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(staggeredGridLayoutManager);
-        DataManger.getInstance().getData(NodesProvider.FILE_NAME, new DataProvider.OnLoadComplete<List<Node>>() {
+        DataManger.getInstance().getData(NodesProvider.FILE_NAME, new OnLoadCompleteListener<List<Node>>() {
             @Override
             public void loadComplete(List<Node> nodes) {
                 setUp(nodes);
@@ -66,7 +64,7 @@ public class NodesFragment extends Fragment {
         }
     };
 
-    private DataProvider.OnLoadComplete<List<Node>> onLoadComplete = new DataProvider.OnLoadComplete<List<Node>>() {
+    private OnLoadCompleteListener<List<Node>> onLoadComplete = new OnLoadCompleteListener<List<Node>>() {
         @Override
         public void loadComplete(List<Node> nodes) {
             if (nodes != null) {

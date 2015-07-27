@@ -11,6 +11,7 @@ import retrofit.RetrofitError;
 import retrofit.client.Response;
 import zhou.v2ex.R;
 import zhou.v2ex.Z2EX;
+import zhou.v2ex.interfaces.OnLoadCompleteListener;
 import zhou.v2ex.interfaces.RepliesService;
 import zhou.v2ex.model.Replies;
 import zhou.v2ex.model.Topic;
@@ -58,7 +59,7 @@ public class RepliesProvider implements DataProvider<List<Replies>> {
     }
 
     @Override
-    public void getFromLocal(OnLoadComplete<List<Replies>> loadComplete) {
+    public void getFromLocal(OnLoadCompleteListener<List<Replies>> loadComplete) {
         File file = new File(Z2EX.getInstance().getCacheDir(), FILE_NAME);
         List<Replies> rs = null;
         if (file.exists()) {
@@ -74,7 +75,7 @@ public class RepliesProvider implements DataProvider<List<Replies>> {
     }
 
     @Override
-    public void getFromNet(final OnLoadComplete<List<Replies>> loadComplete) {
+    public void getFromNet(final OnLoadCompleteListener<List<Replies>> loadComplete) {
         if (!Z2EX.getInstance().isNetworkConnected()) {
             //网络未连接
             Z2EX.getInstance().toast(R.string.network_error);

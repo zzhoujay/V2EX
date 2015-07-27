@@ -23,8 +23,10 @@
         </activity>
 
         <activity android:name=".ui.activity.NodesActivity" />
-        <activity android:name=".ui.activity.TopicDetailActivity" />
+        <activity android:name=".ui.activity.TopicDetailActivity"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden"/>
         <activity android:name=".ui.activity.NodeActivity" />
+        <activity android:name=".ui.activity.LoginActivity" />
         <activity android:name=".ui.activity.MemberActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />

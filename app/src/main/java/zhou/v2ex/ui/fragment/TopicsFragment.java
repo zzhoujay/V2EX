@@ -17,9 +17,9 @@ import java.util.List;
 
 import zhou.v2ex.R;
 import zhou.v2ex.data.DataManger;
-import zhou.v2ex.data.DataProvider;
 import zhou.v2ex.data.TopicsProvider;
 import zhou.v2ex.interfaces.ClickCallback;
+import zhou.v2ex.interfaces.OnLoadCompleteListener;
 import zhou.v2ex.model.Topic;
 import zhou.v2ex.ui.activity.TopicDetailActivity;
 import zhou.v2ex.ui.adapter.TopicsAdapter;
@@ -58,7 +58,7 @@ public class TopicsFragment extends Fragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(linearLayoutManager);
         setUp(null);
-        DataManger.getInstance().getData(topicType.fileName, new DataProvider.OnLoadComplete<List<Topic>>() {
+        DataManger.getInstance().getData(topicType.fileName, new OnLoadCompleteListener<List<Topic>>() {
             @Override
             public void loadComplete(List<Topic> topics) {
                 if (topics != null && topics.size() > 0) {
@@ -83,7 +83,7 @@ public class TopicsFragment extends Fragment {
         }
     };
 
-    private DataProvider.OnLoadComplete<List<Topic>> refreshListener = new DataProvider.OnLoadComplete<List<Topic>>() {
+    private OnLoadCompleteListener<List<Topic>> refreshListener = new OnLoadCompleteListener<List<Topic>>() {
         @Override
         public void loadComplete(List<Topic> topics) {
             if (topics != null && topics.size() > 0) {

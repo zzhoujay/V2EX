@@ -5,11 +5,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -22,11 +17,10 @@ import com.squareup.picasso.Picasso;
 import zhou.v2ex.R;
 import zhou.v2ex.Z2EX;
 import zhou.v2ex.data.DataManger;
-import zhou.v2ex.data.DataProvider;
 import zhou.v2ex.data.MemberProvider;
 import zhou.v2ex.data.TopicsProvider;
+import zhou.v2ex.interfaces.OnLoadCompleteListener;
 import zhou.v2ex.model.Member;
-import zhou.v2ex.ui.fragment.ContentFragment;
 import zhou.v2ex.ui.fragment.TopicsFragment;
 
 /**
@@ -103,7 +97,7 @@ public class MemberActivity extends AppCompatActivity implements AppBarLayout.On
 
     }
 
-    private DataProvider.OnLoadComplete<Member> memberOnLoadComplete = new DataProvider.OnLoadComplete<Member>() {
+    private OnLoadCompleteListener<Member> memberOnLoadComplete = new OnLoadCompleteListener<Member>() {
         @Override
         public void loadComplete(Member member) {
             initData(member);
@@ -140,7 +134,7 @@ public class MemberActivity extends AppCompatActivity implements AppBarLayout.On
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (member != null && Z2EX.getInstance().isSelf(member.username)) {
+        if (member != null && memberProvider != null && Z2EX.getInstance().isSelf(member.username)) {
             DataManger.getInstance().removeProvider(memberProvider.FILE_NAME);
         }
     }
