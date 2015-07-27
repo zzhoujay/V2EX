@@ -13,7 +13,9 @@ import com.squareup.okhttp.Response;
 import java.io.IOException;
 import java.net.CookieManager;
 import java.net.CookiePolicy;
+import java.util.concurrent.TimeUnit;
 
+import zhou.v2ex.V2EX;
 import zhou.v2ex.interfaces.OnLoadCompleteListener;
 
 /**
@@ -25,13 +27,16 @@ public class NetworkManager {
     private OkHttpClient client;
     private Handler mainHandler;
 
+
     private NetworkManager() {
         client = new OkHttpClient();
-        CookieManager manager = new CookieManager();
-        manager.setCookiePolicy(CookiePolicy.ACCEPT_ALL);
+        CookieManager manager = new CookieManager(new PersistentCookieStore(V2EX.getInstance()), CookiePolicy.ACCEPT_ALL);
         client.setCookieHandler(manager);
         client.setFollowRedirects(false);
         client.getCookieHandler();
+        client.setConnectTimeout(3, TimeUnit.SECONDS);
+        client.setReadTimeout(3, TimeUnit.SECONDS);
+        client.setWriteTimeout(3, TimeUnit.SECONDS);
         mainHandler = new Handler(Looper.getMainLooper());
     }
 

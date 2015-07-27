@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 
 import zhou.v2ex.R;
@@ -41,7 +40,7 @@ public class TopicDetailActivity extends AppCompatActivity {
                     @Override
                     public void replySuccess() {
                         topicDetailFragment.refresh();
-                        topicDetailFragment.scrollToBottem();
+                        topicDetailFragment.scrollToBottom();
                     }
                 });
                 getSupportFragmentManager().beginTransaction().add(R.id.fragment_bottom, replyFragment).commit();

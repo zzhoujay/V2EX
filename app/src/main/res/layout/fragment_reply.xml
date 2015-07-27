@@ -22,6 +22,7 @@
         android:layout_alignParentRight="true"
         android:layout_below="@id/gap"
         android:background="@drawable/image_btn_bg"
+        android:padding="4dp"
         android:scaleType="centerInside"
         android:src="@drawable/ic_send_grey" />
 
@@ -36,6 +37,5 @@
         android:layout_toStartOf="@id/reply_btn"
         android:hint="@string/reply_hit"
         android:maxLines="1" />
-
 
 </RelativeLayout>

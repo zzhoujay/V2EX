@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -80,13 +81,8 @@ public class TopicDetailFragment extends Fragment {
         setUp(null);
         swipeRefreshLayout.setRefreshing(true);
         swipeRefreshLayout.setOnRefreshListener(onRefreshListener);
-        DataManger.getInstance().getData(repliesProvider.FILE_NAME, new OnLoadCompleteListener<List<Replies>>() {
-            @Override
-            public void loadComplete(List<Replies> replies) {
-                repliesAdapter.setReplies(replies);
-                swipeRefreshLayout.setRefreshing(false);
-            }
-        });
+        refresh();
+
         return view;
     }
 
@@ -134,6 +130,7 @@ public class TopicDetailFragment extends Fragment {
         public void loadComplete(List<Replies> replies) {
             if (replies != null) {
                 repliesAdapter.setReplies(replies);
+                Log.i("complete", "size:" + replies.size());
             }
             swipeRefreshLayout.setRefreshing(false);
         }
@@ -161,7 +158,7 @@ public class TopicDetailFragment extends Fragment {
         DataManger.getInstance().refresh(topicProvider.FILE_NAME, topicOnLoadComplete);
     }
 
-    public void scrollToBottem() {
+    public void scrollToBottom() {
         recyclerView.scrollToPosition(advanceAdapter.getItemCount() - 1);
     }
 
