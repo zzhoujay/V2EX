@@ -23,7 +23,7 @@ V2EX的非官方Android客户端，极力遵循Material Design风格
 ![演示](http://git.oschina.net/uploads/images/2015/0728/203600_b6748df2_141009.png "演示")
 ![演示](http://git.oschina.net/uploads/images/2015/0728/203618_2b6af7a6_141009.png "演示")
 ![演示](http://git.oschina.net/uploads/images/2015/0728/203633_9792c3f5_141009.png "演示")
-![演示](http://git.oschina.net/uploads/images/2015/0728/203659_2fa62500_141009.png "演示")
+![演示](http://git.oschina.net/uploads/images/2015/0728/212513_627934bf_141009.png "演示")
 ![演示](http://git.oschina.net/uploads/images/2015/0728/203718_74e3ea8a_141009.png "演示")
 ![演示](http://git.oschina.net/uploads/images/2015/0728/203734_2f3d668a_141009.png "演示")
 
