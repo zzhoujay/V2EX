@@ -7,10 +7,12 @@ import java.io.Serializable;
 
 /**
  * Created by 州 on 2015/7/18 0018.
+ * Node的模型类
  */
 public class Node implements Serializable, Parcelable {
 
     public static final String NODE = "node";
+    public static final String NODE_NAME = "node_name";
 
     public int id;
     public String name;

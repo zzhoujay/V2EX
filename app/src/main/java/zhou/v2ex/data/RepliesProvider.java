@@ -19,6 +19,7 @@ import zhou.v2ex.util.FileUtils;
 
 /**
  * Created by 州 on 2015/7/20 0020.
+ * Replies的数据提供器的实现
  */
 public class RepliesProvider implements DataProvider<List<Replies>> {
 
@@ -59,6 +60,7 @@ public class RepliesProvider implements DataProvider<List<Replies>> {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void getFromLocal(OnLoadCompleteListener<List<Replies>> loadComplete) {
         File file = new File(V2EX.getInstance().getCacheDir(), FILE_NAME);
         List<Replies> rs = null;

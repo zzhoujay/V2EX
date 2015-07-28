@@ -7,6 +7,7 @@ import java.io.Serializable;
 
 /**
  * Created by 州 on 2015/7/18 0018.
+ * 回复的模型类
  */
 public class Replies implements Serializable, Parcelable {
     public int id;

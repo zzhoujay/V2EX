@@ -17,11 +17,11 @@ import zhou.v2ex.util.UserUtils;
 
 /**
  * Created by zzhoujay on 2015/7/27 0027.
+ * 回复栏
  */
 public class ReplyFragment extends Fragment {
 
     private EditText editText;
-    private ImageButton imageButton;
     private Topic topic;
     private OnReplySuccessListener onReplySuccessListener;
 
@@ -39,7 +39,7 @@ public class ReplyFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_reply, container, false);
         editText = (EditText) view.findViewById(R.id.reply_content);
-        imageButton = (ImageButton) view.findViewById(R.id.reply_btn);
+        ImageButton imageButton = (ImageButton) view.findViewById(R.id.reply_btn);
         imageButton.setOnClickListener(replyListener);
         return view;
     }
@@ -74,6 +74,14 @@ public class ReplyFragment extends Fragment {
             }
         }
     };
+
+    public void setContent(String content) {
+        editText.setText(content);
+    }
+
+    public void setSelection(int len) {
+        editText.setSelection(len);
+    }
 
     public void setOnReplySuccessListener(OnReplySuccessListener onReplySuccessListener) {
         this.onReplySuccessListener = onReplySuccessListener;

@@ -5,17 +5,19 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import zhou.v2ex.data.DataManger;
 import zhou.v2ex.data.MemberProvider;
+import zhou.v2ex.interfaces.Notifier;
 import zhou.v2ex.model.Member;
 
 /**
  * Created by 州 on 2015/7/18 0018.
+ * Application
  */
 public class V2EX extends Application {
-
-    public static final String HOT_TOPIC_NAME = "hot.cache";
-    public static final String LATEST_TOPIC_NAME = "latest.cache";
-    public static final String NODE_NAME = "node.cache";
 
     public static final String SINGIN_URL = "http://v2ex.com/signin";
     public static final String SITE_URL = "http://v2ex.com";
@@ -24,13 +26,19 @@ public class V2EX extends Application {
     private static V2EX v2EX;
 
     private Member self;
-    private boolean isLogin;
+    private List<Notifier> selfStateChangeNotifier;
 
     @Override
     public void onCreate() {
         super.onCreate();
         v2EX = this;
+        selfStateChangeNotifier = new ArrayList<>();
         setSelf(MemberProvider.getSelf());
+        if (self != null) {
+            MemberProvider memberProvider = new MemberProvider(DataManger.getInstance().getRestAdapter(), self.username, true);
+            DataManger.getInstance().addProvider(memberProvider.FILE_NAME, memberProvider);
+            DataManger.getInstance().refresh(memberProvider.FILE_NAME, null);
+        }
     }
 
     public static V2EX getInstance() {
@@ -62,6 +70,9 @@ public class V2EX extends Application {
 
     public void setSelf(Member member) {
         this.self = member;
+        for (Notifier notifier : selfStateChangeNotifier) {
+            notifier.notice();
+        }
     }
 
     public Member getSelf() {
@@ -72,5 +83,21 @@ public class V2EX extends Application {
         return self != null;
     }
 
+    public boolean logout() {
+        setSelf(null);
+        for (Notifier notifier : selfStateChangeNotifier) {
+            notifier.notice();
+        }
+        return MemberProvider.clearSelf();
+    }
+
+    @SuppressWarnings("unused")
+    public void addSelfChangeNotifier(Notifier notifier) {
+        selfStateChangeNotifier.add(notifier);
+    }
+
+    public void removeSelfChangeNotifier(Notifier notifier) {
+        selfStateChangeNotifier.remove(notifier);
+    }
 
 }

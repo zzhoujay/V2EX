@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +27,7 @@ import zhou.v2ex.ui.adapter.TopicsAdapter;
 
 /**
  * Created by 州 on 2015/7/20 0020.
+ * Topic列表
  */
 public class TopicsFragment extends Fragment {
 
@@ -103,7 +105,20 @@ public class TopicsFragment extends Fragment {
     };
 
     public void setSwipeRefreshEnable(boolean enable) {
-        swipeRefreshLayout.setEnabled(enable);
+        try {
+            swipeRefreshLayout.setEnabled(enable);
+        } catch (Exception e) {
+            Log.d("setSwipeRefreshEnable", "error", e);
+        }
+    }
+
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (!topicType.fileName.equals(TopicsProvider.TopicType.FILE_NAME_HOT) && !topicType.fileName.equals(TopicsProvider.TopicType.FILE_NAME_LATEST)) {
+            DataManger.getInstance().removeProvider(topicType.fileName);
+        }
     }
 
     public static TopicsFragment newInstance(@NonNull TopicsProvider.TopicType topicType) {

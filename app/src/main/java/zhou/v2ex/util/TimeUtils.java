@@ -6,6 +6,7 @@ import java.util.Date;
 
 /**
  * Created by 州 on 2015/7/20 0020.
+ * TimeUtils
  */
 public class TimeUtils {
 
@@ -108,6 +109,7 @@ public class TimeUtils {
     /**
      * 字符串转换为日期:yyyy-MM-dd
      */
+    @SuppressWarnings("unused")
     public static Date strToDate(String str) {
         Date date = null;
         try {

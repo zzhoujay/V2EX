@@ -20,6 +20,7 @@ import zhou.v2ex.util.TimeUtils;
 
 /**
  * Created by 州 on 2015/7/20 0020.
+ * Topic列表Adapter
  */
 public class TopicsAdapter extends RecyclerView.Adapter<TopicsAdapter.Holder> {
 

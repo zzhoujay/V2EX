@@ -17,6 +17,7 @@ import zhou.v2ex.util.ContentUtils;
 
 /**
  * Created by 州 on 2015/7/20 0020.
+ * Node列表的Adapter
  */
 public class NodesAdapter extends RecyclerView.Adapter<NodesAdapter.Holder> {
 

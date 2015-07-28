@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/relativeLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
@@ -13,18 +11,23 @@
         android:background="@color/material_cyan_500"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
 
-    <FrameLayout
-        android:id="@+id/fragment_bottom"
+    <EditText
+        android:id="@+id/new_topic_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true" />
+        android:layout_below="@id/toolbar"
+        android:hint="@string/title_hint"
+        android:maxLines="1"
+        android:minHeight="60dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp" />
 
-    <FrameLayout
-        android:id="@+id/fragment_content"
+    <EditText
+        android:id="@+id/new_topic_content"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@id/fragment_bottom"
-        android:layout_below="@id/toolbar" />
-
-
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@id/new_topic_title"
+        android:gravity="start"
+        android:hint="@string/content_hint" />
 </RelativeLayout>

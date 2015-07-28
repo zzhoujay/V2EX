@@ -5,6 +5,7 @@ import java.io.FilenameFilter;
 
 /**
  * Created by zzhoujay on 2015/7/22 0022.
+ * 文件过滤
  */
 public class FileNameFilter implements FilenameFilter {
 

@@ -69,7 +69,7 @@ public class RichText extends TextView {
      * @param text 内容
      */
     public void setRichText(String text) {
-        if(text==null){
+        if (text == null) {
             return;
         }
         Spanned spanned = Html.fromHtml(text, asyncImageGetter, null);
@@ -159,14 +159,17 @@ public class RichText extends TextView {
         }
     }
 
+    @SuppressWarnings("unused")
     public void setPlaceHolder(Drawable placeHolder) {
         this.placeHolder = placeHolder;
     }
 
+    @SuppressWarnings("unused")
     public void setErrorImage(Drawable errorImage) {
         this.errorImage = errorImage;
     }
 
+    @SuppressWarnings("unused")
     public void setOnImageClickListener(OnImageClickListener onImageClickListener) {
         this.onImageClickListener = onImageClickListener;
     }

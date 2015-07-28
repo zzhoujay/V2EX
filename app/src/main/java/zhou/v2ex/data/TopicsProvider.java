@@ -21,6 +21,7 @@ import zhou.v2ex.util.FileUtils;
 
 /**
  * Created by 州 on 2015/7/20 0020.
+ * Topic列表的数据提供器的实现
  */
 public class TopicsProvider implements DataProvider<List<Topic>> {
 
@@ -59,6 +60,7 @@ public class TopicsProvider implements DataProvider<List<Topic>> {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void getFromLocal(OnLoadCompleteListener<List<Topic>> loadComplete) {
         File file = new File(V2EX.getInstance().getCacheDir(), topicType.fileName);
         List<Topic> ts = null;
@@ -161,6 +163,7 @@ public class TopicsProvider implements DataProvider<List<Topic>> {
             return topicType;
         }
 
+        @SuppressWarnings("unused")
         public static TopicType newTopicTypeByNodeName(String fileName, String nodeName) {
             TopicType topicType = new TopicType(fileName);
             topicType.nodeName = nodeName;

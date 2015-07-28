@@ -17,7 +17,7 @@
             coord:layout_scrollFlags="scroll|enterAlways">
 
             <android.support.v7.widget.Toolbar
-                android:id="@+id/toolBar"
+                android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:background="@color/material_cyan_500" />

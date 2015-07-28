@@ -1,5 +1,6 @@
 package zhou.v2ex.util;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -10,18 +11,19 @@ import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import zhou.v2ex.R;
 import zhou.v2ex.V2EX;
 import zhou.v2ex.interfaces.OnLoadCompleteListener;
-import zhou.v2ex.model.Node;
 import zhou.v2ex.net.NetworkManager;
+import zhou.v2ex.net.PersistentCookieStore;
+import zhou.v2ex.ui.activity.LoginActivity;
 
 /**
  * Created by zzhoujay on 2015/7/24 0024.
+ * UserUtils
  */
 public class UserUtils {
 
@@ -88,23 +90,6 @@ public class UserUtils {
         return null;
     }
 
-    public static List<Node> getNodesFromResponse(String content) {
-        Pattern pattern = Pattern.compile("<a class=\"grid_item\" href=\"/go/([^\"]+)\" id=([^>]+)><div([^>]+)><img src=\"([^\"]+)([^>]+)><([^>]+)></div>([^<]+)");
-        Matcher matcher = pattern.matcher(content);
-        ArrayList<Node> collections = new ArrayList<>();
-        while (matcher.find()) {
-            Node node = new Node();
-            node.name = matcher.group(1);
-            node.title = matcher.group(7);
-            node.url = matcher.group(4);
-            if (node.url.startsWith("//"))
-                node.url = "http:" + node.url;
-            else
-                node.url = V2EX.SITE_URL + node.url;
-            collections.add(node);
-        }
-        return collections;
-    }
 
     public static void replyTopic(int topicId, final String content, @NonNull final OnLoadCompleteListener<Boolean> loadCompleteListener) {
         final String url = V2EX.SITE_URL + "/t/" + topicId;
@@ -136,6 +121,12 @@ public class UserUtils {
                             Log.d("xxx", "code:" + response.code());
                             if (response.code() == 302) {
                                 flag = true;
+                            } else if (response.code() == 403) {
+                                V2EX.getInstance().toast(R.string.identity_time_out);
+                                Intent intent = new Intent(V2EX.getInstance(), LoginActivity.class);
+                                V2EX.getInstance().startActivity(intent);
+                                loadCompleteListener.loadComplete(false);
+                                return;
                             }
                             Log.d("replyTopic", (flag ? "success" : "error"));
                             loadCompleteListener.loadComplete(flag);
@@ -180,6 +171,12 @@ public class UserUtils {
                             boolean flag = false;
                             if (response.code() == 302) {
                                 flag = true;
+                            } else if (response.code() == 403) {
+                                V2EX.getInstance().toast(R.string.identity_time_out);
+                                Intent intent = new Intent(V2EX.getInstance(), LoginActivity.class);
+                                V2EX.getInstance().startActivity(intent);
+                                onLoadCompleteListener.loadComplete(false);
+                                return;
                             }
                             Log.d("createTopic", (flag ? "success" : "error"));
                             onLoadCompleteListener.loadComplete(flag);
@@ -193,137 +190,11 @@ public class UserUtils {
         });
     }
 
-    public static void collectionNode(String node, final OnLoadCompleteListener<Boolean> onLoadCompleteListener) {
-        String url = V2EX.SITE_URL + "/go/" + node;
-        Request request = NetworkManager.getInstance().requestBuilder()
-                .addHeader("Referer", V2EX.SITE_URL)
-                .addHeader("Content-Type", "application/x-www-form-urlencoded")
-                .url(url)
-                .get()
-                .build();
-        NetworkManager.getInstance().requestString(request, new OnLoadCompleteListener<String>() {
-            @Override
-            public void loadComplete(String s) {
-                if (s != null) {
-                    String u = getCollectionFromResponse(s);
-                    if (u.isEmpty()) {
-                        u = getCollectionFromEnResponse(s);
-                    }
 
-                    if (!u.isEmpty()) {
-                        boolean flag = u.contains("unfavorite");
-                        Request r = NetworkManager.getInstance().requestBuilder()
-                                .addHeader("Referer", V2EX.SITE_URL)
-                                .addHeader("Content-Type", "application/x-www-form-urlencoded")
-                                .url(V2EX.SITE_URL + u)
-                                .get()
-                                .build();
-                        NetworkManager.getInstance().request(r, new Callback() {
-                            @Override
-                            public void onFailure(Request request, IOException e) {
-                                Log.d("collectionNode", "failure", e);
-                                onLoadCompleteListener.loadComplete(false);
-                            }
-
-                            @Override
-                            public void onResponse(Response response) throws IOException {
-                                boolean f = false;
-                                if (response.code() == 302) {
-                                    f = true;
-                                }
-                                Log.d("collectionNode", (f ? "success" : "error"));
-                                onLoadCompleteListener.loadComplete(true);
-                            }
-                        });
-                    } else {
-                        Log.d("collectionNode", "url is empty");
-                        onLoadCompleteListener.loadComplete(false);
-                    }
-                } else {
-                    Log.d("collectionNode", "s is null");
-                    onLoadCompleteListener.loadComplete(false);
-                }
-            }
-        });
-    }
-
-    public static String getCollectionFromResponse(String response) {
-        Pattern pattern = Pattern.compile("<a href=\"(.*)\">加入收藏</a>");
-        Matcher matcher = pattern.matcher(response);
-        if (matcher.find())
-            return matcher.group(1);
-
-        pattern = Pattern.compile("<a href=\"(.*)\">取消收藏</a>");
-        matcher = pattern.matcher(response);
-        if (matcher.find())
-            return matcher.group(1);
-
-        return "";
-    }
-
-    public static String getCollectionFromEnResponse(String response) {
-        Pattern pattern = Pattern.compile("<a href=\"(.*)\">Favorite This Node</a>");
-        Matcher matcher = pattern.matcher(response);
-        if (matcher.find())
-            return matcher.group(1);
-
-        pattern = Pattern.compile("<a href=\"(.*)\">Unfavorite</a>");
-        matcher = pattern.matcher(response);
-        if (matcher.find())
-            return matcher.group(1);
-
-        return "";
-    }
-
-    public static void collectionTopic(int topicId, final OnLoadCompleteListener<Boolean> onLoadCompleteListener) {
-        String url = V2EX.SITE_URL + "/t/" + topicId;
-        Request request = NetworkManager.getInstance().requestBuilder()
-                .addHeader("Referer", V2EX.SITE_URL)
-                .addHeader("Content-Type", "application/x-www-form-urlencoded")
-                .url(url)
-                .get()
-                .build();
-        NetworkManager.getInstance().requestString(request, new OnLoadCompleteListener<String>() {
-            @Override
-            public void loadComplete(String s) {
-                if (s != null) {
-                    String u = getCollectionFromResponse(s);
-
-                    if (!u.isEmpty()) {
-                        u = u.replace("\" class=\"tb", "");
-                        Request r = NetworkManager.getInstance().requestBuilder()
-                                .addHeader("Referer", V2EX.SITE_URL)
-                                .addHeader("Content-Type", "application/x-www-form-urlencoded")
-                                .url(V2EX.SITE_URL + u)
-                                .get()
-                                .build();
-                        NetworkManager.getInstance().request(r, new Callback() {
-                            @Override
-                            public void onFailure(Request request, IOException e) {
-                                Log.d("collectionTopic", "failure", e);
-                                onLoadCompleteListener.loadComplete(false);
-                            }
-
-                            @Override
-                            public void onResponse(Response response) throws IOException {
-                                boolean f = false;
-                                if (response.code() == 302) {
-                                    f = true;
-                                }
-                                Log.d("collectionTopic", (f ? "success" : "error"));
-                                onLoadCompleteListener.loadComplete(f);
-                            }
-                        });
-                    } else {
-                        Log.d("collectionTopic", "u is empty");
-                        onLoadCompleteListener.loadComplete(false);
-                    }
-                } else {
-                    Log.d("collectionTopic", "s is null");
-                    onLoadCompleteListener.loadComplete(false);
-                }
-            }
-        });
+    public static boolean logout() {
+        PersistentCookieStore cookieStore = new PersistentCookieStore(V2EX.getInstance());
+        cookieStore.removeAll();
+        return V2EX.getInstance().logout();
     }
 
 

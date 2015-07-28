@@ -7,6 +7,7 @@ import zhou.v2ex.model.Member;
 
 /**
  * Created by 州 on 2015/7/18 0018.
+ * Member的Service
  */
 public interface MemberService {
     @GET("/api/members/show.json")

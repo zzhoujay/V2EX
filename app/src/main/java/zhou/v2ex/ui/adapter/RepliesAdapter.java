@@ -1,7 +1,5 @@
 package zhou.v2ex.ui.adapter;
 
-import android.content.Intent;
-import android.os.Parcelable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,20 +13,20 @@ import java.util.List;
 
 import zhou.v2ex.R;
 import zhou.v2ex.interfaces.OnItemClickListener;
-import zhou.v2ex.model.Member;
 import zhou.v2ex.model.Replies;
-import zhou.v2ex.ui.activity.MemberActivity;
 import zhou.v2ex.ui.widget.RichText;
 import zhou.v2ex.util.ContentUtils;
 import zhou.v2ex.util.TimeUtils;
 
 /**
  * Created by 州 on 2015/7/20 0020.
+ * 回复列表Adapter
  */
 public class RepliesAdapter extends RecyclerView.Adapter<RepliesAdapter.Holder> {
 
     private List<Replies> replies;
     private OnItemClickListener iconClickCallback;
+    private OnItemClickListener itemClickCallback;
 
     public RepliesAdapter(List<Replies> replies) {
         this.replies = replies;
@@ -44,11 +42,21 @@ public class RepliesAdapter extends RecyclerView.Adapter<RepliesAdapter.Holder> 
         }
     };
 
+    private OnItemClickListener onItemClickListener = new OnItemClickListener() {
+        @Override
+        public void onItemClicked(View view, int position) {
+            if (itemClickCallback != null) {
+                itemClickCallback.onItemClicked(view, position);
+            }
+        }
+    };
+
     @Override
     public Holder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_replies, null);
         Holder holder = new Holder(view);
         holder.setIconClickListener(onIconClickListener);
+        holder.setOnItemClickListener(onItemClickListener);
         return holder;
     }
 
@@ -76,8 +84,9 @@ public class RepliesAdapter extends RecyclerView.Adapter<RepliesAdapter.Holder> 
         public RichText content;
 
         private OnItemClickListener iconClickListener;
+        private OnItemClickListener onItemClickListener;
 
-        public Holder(View itemView) {
+        public Holder(final View itemView) {
             super(itemView);
             icon = (ImageView) itemView.findViewById(R.id.item_replies_icon);
             user = (TextView) itemView.findViewById(R.id.item_replies_user);
@@ -94,10 +103,23 @@ public class RepliesAdapter extends RecyclerView.Adapter<RepliesAdapter.Holder> 
                     }
                 }
             });
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (onItemClickListener != null) {
+                        onItemClickListener.onItemClicked(itemView, getAdapterPosition());
+                    }
+                }
+            });
         }
 
         public void setIconClickListener(OnItemClickListener iconClickListener) {
             this.iconClickListener = iconClickListener;
+        }
+
+        public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+            this.onItemClickListener = onItemClickListener;
         }
     }
 
@@ -112,5 +134,9 @@ public class RepliesAdapter extends RecyclerView.Adapter<RepliesAdapter.Holder> 
 
     public void setIconClickCallback(OnItemClickListener iconClickCallback) {
         this.iconClickCallback = iconClickCallback;
+    }
+
+    public void setItemClickCallback(OnItemClickListener itemClickCallback) {
+        this.itemClickCallback = itemClickCallback;
     }
 }

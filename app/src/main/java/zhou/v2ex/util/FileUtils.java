@@ -27,11 +27,13 @@ public class FileUtils {
      * @param path 文件的全路径
      * @return 文件是否存在
      */
+    @SuppressWarnings("unused")
     public static boolean isFileExists(String path) {
         File file = new File(path);
         return file.exists();
     }
 
+    @SuppressWarnings("unused")
     public static boolean isFileExists(File parent, String name) {
         File file = new File(parent, name);
         return file.exists();
@@ -43,6 +45,7 @@ public class FileUtils {
      * @param path 文件全路径
      * @return 后缀名
      */
+    @SuppressWarnings("unused")
     public static String getFileExtension(String path) {
         return path == null ? null : path.substring(path.lastIndexOf(".") + 1);
     }
@@ -53,6 +56,7 @@ public class FileUtils {
      * @param path 文件全路径
      * @return 去后缀名后的文件名
      */
+    @SuppressWarnings("unused")
     public static String getPathWithoutExtension(String path) {
         return path == null ? null : path.substring(0, path.lastIndexOf("."));
     }
@@ -63,6 +67,7 @@ public class FileUtils {
      * @param path 文件路径
      * @param obj  需要被写入的对象
      */
+    @SuppressWarnings("unused")
     public static void writeObject(String path, Object obj) {
         File file = new File(path);
         writeObject(file, obj);
@@ -74,6 +79,7 @@ public class FileUtils {
      * @param file 文件对象
      * @param obj  需要写入文件的对象
      */
+    @SuppressWarnings("unused")
     public static void writeObject(File file, Object obj) {
         if (null == file || obj == null) {
             return;
@@ -109,6 +115,7 @@ public class FileUtils {
      * @param path 文件路径
      * @return 读取到的对象
      */
+    @SuppressWarnings("unused")
     public static Object readObject(String path) {
         File file = new File(path);
         return readObject(file);
@@ -156,6 +163,7 @@ public class FileUtils {
      * @param size 大小
      * @return B、KB、MB类型的字符串
      */
+    @SuppressWarnings("unused")
     public static String formatSize(int size) {
         if (size < 1024 * 0.6) {
             return size + "B";
@@ -166,6 +174,7 @@ public class FileUtils {
         }
     }
 
+    @SuppressWarnings("unused")
     public static boolean createFolder(File file, String name) {
         if (file.exists()) {
             File f = new File(file, name);
@@ -176,6 +185,7 @@ public class FileUtils {
         return false;
     }
 
+    @SuppressWarnings("unused")
     public static void deleteSomeCache(File parent, String start, int maxSize) {
         if(parent!=null){
             File[] files = parent.listFiles(new FileNameFilter(start));

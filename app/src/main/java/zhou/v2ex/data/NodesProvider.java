@@ -18,6 +18,7 @@ import zhou.v2ex.util.FileUtils;
 
 /**
  * Created by 州 on 2015/7/20 0020.
+ * Node的数据提供器的实现
  */
 public class NodesProvider implements DataProvider<List<Node>> {
 
@@ -55,6 +56,7 @@ public class NodesProvider implements DataProvider<List<Node>> {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void getFromLocal(OnLoadCompleteListener<List<Node>> loadComplete) {
         File file = new File(V2EX.getInstance().getCacheDir(), FILE_NAME);
         List<Node> ns = null;

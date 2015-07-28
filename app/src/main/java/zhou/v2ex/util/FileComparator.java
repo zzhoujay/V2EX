@@ -5,6 +5,7 @@ import java.util.Comparator;
 
 /**
  * Created by zzhoujay on 2015/7/22 0022.
+ * 文件比较器
  */
 public class FileComparator implements Comparator<File> {
     @Override

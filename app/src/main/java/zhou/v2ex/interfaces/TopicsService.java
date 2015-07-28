@@ -9,6 +9,7 @@ import zhou.v2ex.model.Topic;
 
 /**
  * Created by 州 on 2015/7/18 0018.
+ * Topic列表的Service
  */
 public interface TopicsService {
 

@@ -2,6 +2,7 @@ package zhou.v2ex.util;
 
 /**
  * Created by zzhoujay on 2015/7/23 0023.
+ * ContentUtil
  */
 public class ContentUtils {
     public static String formatContent(String content) {

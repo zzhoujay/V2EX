@@ -24,10 +24,12 @@ import com.squareup.picasso.Picasso;
 
 import zhou.v2ex.data.DataManger;
 import zhou.v2ex.data.TopicsProvider;
+import zhou.v2ex.interfaces.Notifier;
 import zhou.v2ex.model.Member;
 import zhou.v2ex.ui.activity.LoginActivity;
 import zhou.v2ex.ui.activity.MemberActivity;
 import zhou.v2ex.ui.activity.NodesActivity;
+import zhou.v2ex.ui.dialog.ContentDialog;
 import zhou.v2ex.ui.fragment.TopicsFragment;
 
 
@@ -38,9 +40,10 @@ public class MainActivity extends AppCompatActivity {
     private NavigationView navigationView;
     private TopicsFragment[] fragments;
     private ImageView icon;
-    private TextView name;
+    private TextView name, bio;
     private View header;
-    DrawerLayout drawerLayout;
+    private DrawerLayout drawerLayout;
+    private ContentDialog about;
 
     private int[] ids = {R.string.tab1, R.string.tab2};
 
@@ -49,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 //        BlueWare.withApplicationToken("36DF853CC86E94516EC02E282C2DF70809").start(this.getApplication());
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolBar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -79,10 +82,15 @@ public class MainActivity extends AppCompatActivity {
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem menuItem) {
+                drawerLayout.closeDrawers();
                 switch (menuItem.getItemId()) {
                     case R.id.drawer_tab2:
                         Intent intent = new Intent(MainActivity.this, NodesActivity.class);
                         startActivity(intent);
+                        return true;
+                    case R.id.drawer_about:
+                        about = ContentDialog.newInstance(getString(R.string.about), getString(R.string.about_content));
+                        about.show(getSupportFragmentManager(), "about");
                         return true;
                 }
                 return false;
@@ -126,6 +134,7 @@ public class MainActivity extends AppCompatActivity {
         header = findViewById(R.id.header);
         icon = (ImageView) findViewById(R.id.header_icon);
         name = (TextView) findViewById(R.id.header_name);
+        bio = (TextView) findViewById(R.id.header_bio);
 
     }
 
@@ -133,9 +142,11 @@ public class MainActivity extends AppCompatActivity {
         if (member == null) {
             name.setText(R.string.login);
             icon.setImageResource(R.mipmap.ic_launcher);
+            bio.setText("");
             return;
         }
         name.setText(member.username);
+        bio.setText(member.bio);
         Picasso.with(this).load("http:" + member.avatar_large).placeholder(R.mipmap.ic_launcher)
                 .error(R.mipmap.ic_launcher).into(icon);
     }
@@ -147,7 +158,11 @@ public class MainActivity extends AppCompatActivity {
         if (user != null) {
             setUserInfo(user);
             name.setOnClickListener(userInfoListener);
+            header.setOnClickListener(userInfoListener);
+            icon.setOnClickListener(userInfoListener);
         } else {
+            setUserInfo(null);
+            icon.setOnClickListener(loginListener);
             name.setOnClickListener(loginListener);
         }
     }
@@ -169,10 +184,25 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+    private Notifier notifier = new Notifier() {
+        @Override
+        public void notice() {
+            Member user = V2EX.getInstance().getSelf();
+            if (user != null) {
+                setUserInfo(user);
+                name.setOnClickListener(null);
+                header.setOnClickListener(userInfoListener);
+            } else {
+                name.setOnClickListener(loginListener);
+            }
+        }
+    };
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
         DataManger.getInstance().removeProvider(TopicsProvider.TopicType.FILE_NAME_HOT);
         DataManger.getInstance().removeProvider(TopicsProvider.TopicType.FILE_NAME_LATEST);
+        V2EX.getInstance().removeSelfChangeNotifier(notifier);
     }
 }

@@ -8,6 +8,8 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -22,9 +24,11 @@ import zhou.v2ex.data.TopicsProvider;
 import zhou.v2ex.interfaces.OnLoadCompleteListener;
 import zhou.v2ex.model.Member;
 import zhou.v2ex.ui.fragment.TopicsFragment;
+import zhou.v2ex.util.UserUtils;
 
 /**
  * Created by zzhoujay on 2015/7/22 0022.
+ * Member详细资料
  */
 public class MemberActivity extends AppCompatActivity implements AppBarLayout.OnOffsetChangedListener {
 
@@ -79,8 +83,8 @@ public class MemberActivity extends AppCompatActivity implements AppBarLayout.On
 
     private void initData(Member member) {
         if (member != null) {
-//            name.setText(member.username);
             collapsingToolbarLayout.setTitle(member.username);
+            name.setText(TextUtils.isEmpty(member.bio) ? getString(R.string.describe_empty) : member.bio);
             Picasso.with(this).load("http:" + member.avatar_large).placeholder(R.mipmap.ic_launcher)
                     .error(R.mipmap.ic_launcher).into(icon);
             topicsFragment = TopicsFragment.newInstance(TopicsProvider.TopicType.newTopicTypeByUserName("member_topic_" + member.username, member.username));
@@ -105,10 +109,49 @@ public class MemberActivity extends AppCompatActivity implements AppBarLayout.On
     };
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        if (V2EX.getInstance().isSelf(member == null ? null : member.username)) {
+            MenuItem item = menu.add(0, 10086, 1, R.string.logout);
+            item.setIcon(R.drawable.ic_exit_to_app_white);
+            item.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+            MenuItem item1 = menu.add(0, 10010, 0, R.string.refresh);
+            item1.setIcon(R.drawable.ic_refresh_white);
+            item1.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+        }
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
+                return true;
+            case 10086:
+                if (V2EX.getInstance().isNetworkConnected()) {
+                    if (UserUtils.logout()) {
+                        V2EX.getInstance().toast(R.string.logout_success);
+                        finish();
+                    }
+                } else {
+                    V2EX.getInstance().toast(R.string.network_error);
+                }
+                return true;
+            case 10010:
+                if (member != null && V2EX.getInstance().isSelf(member.username)) {
+                    DataManger.getInstance().refresh(MemberProvider.SElF, new OnLoadCompleteListener<Member>() {
+                        @Override
+                        public void loadComplete(Member member) {
+                            if (member != null) {
+                                initData(member);
+                                V2EX.getInstance().toast(R.string.refresh_success);
+                            } else {
+                                V2EX.getInstance().toast(R.string.refresh_error);
+                            }
+                        }
+                    });
+                }
                 return true;
         }
         return super.onOptionsItemSelected(item);

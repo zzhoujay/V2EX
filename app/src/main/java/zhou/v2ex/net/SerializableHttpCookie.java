@@ -13,6 +13,7 @@ import java.net.HttpCookie;
 
 /**
  * Created by zzhoujay on 2015/7/27 0027.
+ * 可序列化的cookie
  */
 public class SerializableHttpCookie implements Serializable {
     private static final String TAG = SerializableHttpCookie.class

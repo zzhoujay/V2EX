@@ -1,6 +1,7 @@
 package zhou.v2ex.ui.activity;
 
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -10,6 +11,7 @@ import zhou.v2ex.ui.fragment.NodesFragment;
 
 /**
  * Created by 州 on 2015/7/20 0020.
+ * Node列表
  */
 public class NodesActivity extends AppCompatActivity {
 
@@ -17,13 +19,14 @@ public class NodesActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fragment);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolBar);
-        if (toolbar != null) {
-            setSupportActionBar(toolbar);
-            getSupportActionBar().setDisplayUseLogoEnabled(true);
-            getSupportActionBar().setDisplayShowTitleEnabled(true);
-            getSupportActionBar().setDisplayShowHomeEnabled(true);
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayUseLogoEnabled(true);
+            actionBar.setDisplayShowTitleEnabled(true);
+            actionBar.setDisplayShowHomeEnabled(true);
+            actionBar.setDisplayHomeAsUpEnabled(true);
         }
         setTitle(R.string.all_node_list);
         NodesFragment nodesFragment = NodesFragment.newInstance();

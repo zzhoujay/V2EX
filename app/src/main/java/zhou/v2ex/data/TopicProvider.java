@@ -18,6 +18,7 @@ import zhou.v2ex.util.FileUtils;
 
 /**
  * Created by zzhoujay on 2015/7/22 0022.
+ * Topic的数据提供器的实现
  */
 public class TopicProvider implements DataProvider<Topic> {
 

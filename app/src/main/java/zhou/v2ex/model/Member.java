@@ -7,6 +7,7 @@ import java.io.Serializable;
 
 /**
  * Created by 州 on 2015/7/18 0018.
+ * Member的模型类
  */
 public class Member implements Serializable, Parcelable {
 

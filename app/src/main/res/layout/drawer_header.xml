@@ -10,12 +10,14 @@
     android:orientation="vertical"
     android:padding="5dp">
 
+
     <ImageView
         android:id="@+id/header_icon"
         android:layout_width="70dp"
         android:layout_height="70dp"
         android:layout_centerVertical="true"
         android:layout_margin="10dp"
+        android:clickable="true"
         android:scaleType="fitCenter"
         android:src="@mipmap/ic_launcher" />
 
@@ -24,10 +26,28 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
+        android:layout_margin="4dp"
         android:layout_toEndOf="@id/header_icon"
         android:layout_toRightOf="@id/header_icon"
         android:clickable="true"
+        android:ellipsize="end"
+        android:maxLines="1"
         android:text="@string/login"
         android:textColor="@color/material_cyan_50"
         android:textSize="@dimen/material_title" />
+
+    <TextView
+        android:id="@+id/header_bio"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/header_name"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="5dp"
+        android:layout_toEndOf="@id/header_icon"
+        android:layout_toRightOf="@id/header_icon"
+        android:ellipsize="end"
+        android:maxLines="4"
+        android:textColor="@color/material_cyan_200"
+        android:textSize="@dimen/material_body" />
+
 </RelativeLayout>

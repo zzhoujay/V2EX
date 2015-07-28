@@ -25,6 +25,7 @@ import zhou.v2ex.ui.adapter.NodesAdapter;
 
 /**
  * Created by 州 on 2015/7/20 0020.
+ * 显示Node列表的Fragment
  */
 public class NodesFragment extends Fragment {
 
@@ -90,7 +91,8 @@ public class NodesFragment extends Fragment {
     }
 
     public static NodesFragment newInstance() {
-        NodesFragment nodesFragment = new NodesFragment();
+        NodesFragment nodesFragment;
+        nodesFragment = new NodesFragment();
         return nodesFragment;
     }
 }

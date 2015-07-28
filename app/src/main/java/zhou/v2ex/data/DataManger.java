@@ -1,5 +1,7 @@
 package zhou.v2ex.data;
 
+import android.support.annotation.Nullable;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,6 +12,7 @@ import zhou.v2ex.interfaces.OnLoadCompleteListener;
 
 /**
  * Created by 州 on 2015/7/20 0020.
+ * 数据管理器（内存、本地缓存、联网加载）
  */
 public class DataManger {
 
@@ -30,8 +33,15 @@ public class DataManger {
         return dataManger;
     }
 
+    /**
+     * 联网刷新数据
+     *
+     * @param key            key
+     * @param onLoadComplete 回调
+     * @param <T>            type
+     */
     @SuppressWarnings("unchecked")
-    public <T> void refresh(String key, final OnLoadCompleteListener<T> onLoadComplete) {
+    public <T> void refresh(String key, @Nullable final OnLoadCompleteListener<T> onLoadComplete) {
         final DataProvider<T> provider = providerMap.get(key);
         if (provider != null) {
             //进行联网加载
@@ -59,6 +69,13 @@ public class DataManger {
         }
     }
 
+    /**
+     * 按照 内存->本地缓存->网络数据 的顺序加载数据
+     *
+     * @param key            key
+     * @param onLoadComplete 回调
+     * @param <T>            type
+     */
     @SuppressWarnings("unchecked")
     public <T> void getData(String key, final OnLoadCompleteListener<T> onLoadComplete) {
         final DataProvider<T> provider = providerMap.get(key);
@@ -109,6 +126,13 @@ public class DataManger {
         }
     }
 
+    /**
+     * 添加数据提供器
+     *
+     * @param key      key
+     * @param provider 数据提供器
+     * @param <T>      type
+     */
     public <T> void addProvider(String key, DataProvider<T> provider) {
         if (provider != null && key != null)
             if (!providerMap.containsKey(key)) {
@@ -116,6 +140,14 @@ public class DataManger {
             }
     }
 
+    /**
+     * 添加数据提供器
+     *
+     * @param key      key
+     * @param provider 数据提供器
+     * @param flag     是否强制添加
+     * @param <T>      type
+     */
     public <T> void addProvider(String key, DataProvider<T> provider, boolean flag) {
         if (provider != null && key != null) {
             if (flag) {
@@ -126,6 +158,17 @@ public class DataManger {
                 }
             }
         }
+    }
+
+    /**
+     * 是否已经添加
+     *
+     * @param key key
+     * @return boolean
+     */
+    @SuppressWarnings("unused")
+    public boolean hasProvider(String key) {
+        return providerMap.containsKey(key);
     }
 
     public RestAdapter getRestAdapter() {

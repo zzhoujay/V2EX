@@ -20,6 +20,7 @@ import zhou.v2ex.interfaces.OnLoadCompleteListener;
 
 /**
  * Created by zzhoujay on 2015/7/27 0027.
+ * 网络请求管理器
  */
 public class NetworkManager {
 
@@ -47,8 +48,14 @@ public class NetworkManager {
         return networkManager;
     }
 
+    /**
+     * 获取Request.Builder
+     *
+     * @return builder
+     */
     public Request.Builder requestBuilder() {
-        Request.Builder builder = new Request.Builder()
+        Request.Builder builder;
+        builder = new Request.Builder()
                 .addHeader("Cache-Control", "max-age=0")
                 .addHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8")
                 .addHeader("Accept-Charset", "utf-8, iso-8859-1, utf-16, *;q=0.7")
@@ -59,6 +66,12 @@ public class NetworkManager {
         return builder;
     }
 
+    /**
+     * 异步请求
+     *
+     * @param request  请求体
+     * @param callback 回调
+     */
     public void request(Request request, final Callback callback) {
         client.newCall(request).enqueue(new Callback() {
             @Override
@@ -92,6 +105,12 @@ public class NetworkManager {
         });
     }
 
+    /**
+     * 异步请求字符串内容
+     *
+     * @param request      请求体
+     * @param loadComplete 回调
+     */
     public void requestString(Request request, @NonNull final OnLoadCompleteListener<String> loadComplete) {
         client.newCall(request).enqueue(new Callback() {
             @Override

@@ -8,6 +8,9 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -23,19 +26,18 @@ import zhou.v2ex.util.UserUtils;
 
 /**
  * Created by zzhoujay on 2015/7/24 0024.
+ * 登录
  */
 public class LoginActivity extends AppCompatActivity {
 
-    private TextInputLayout usernameLayout, passwordLayout;
     private EditText username, password;
-    private Button login;
     private ProgressDialog progressDialogUserInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolBar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -48,22 +50,74 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void initView() {
-        usernameLayout = (TextInputLayout) findViewById(R.id.login_username_layout);
-        passwordLayout = (TextInputLayout) findViewById(R.id.login_password_layout);
+        final TextInputLayout usernameLayout = (TextInputLayout) findViewById(R.id.login_username_layout);
+        final TextInputLayout passwordLayout = (TextInputLayout) findViewById(R.id.login_password_layout);
         username = (EditText) findViewById(R.id.login_username);
         password = (EditText) findViewById(R.id.login_password);
-        login = (Button) findViewById(R.id.login_btn);
+        Button login = (Button) findViewById(R.id.login_btn);
+
+        username.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (TextUtils.isEmpty(username.getText())) {
+                    usernameLayout.setError(getString(R.string.username_empty));
+                    usernameLayout.setErrorEnabled(true);
+                } else {
+                    usernameLayout.setErrorEnabled(false);
+                }
+            }
+        });
+
+        password.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (TextUtils.isEmpty(password.getText())) {
+                    passwordLayout.setErrorEnabled(true);
+                    passwordLayout.setError(getString(R.string.password_empty));
+                } else {
+                    passwordLayout.setErrorEnabled(false);
+                }
+            }
+        });
 
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                final String usernameStr = username.getText().toString();
+                final String passwordStr = password.getText().toString();
+                if (usernameStr.isEmpty()) {
+                    V2EX.getInstance().toast(R.string.username_empty);
+                    return;
+                }
+                if (passwordStr.isEmpty()) {
+                    V2EX.getInstance().toast(R.string.password_empty);
+                }
                 final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this);
                 progressDialog.setMessage(getString(R.string.signin_progress));
                 progressDialog.setCanceledOnTouchOutside(false);
                 progressDialog.setCancelable(false);
                 progressDialog.show();
-                final String usernameStr = username.getText().toString();
-                UserUtils.login(usernameStr, password.getText().toString(), new OnLoadCompleteListener<Boolean>() {
+                UserUtils.login(usernameStr, passwordStr, new OnLoadCompleteListener<Boolean>() {
                     @Override
                     public void loadComplete(Boolean aBoolean) {
                         if (aBoolean) {

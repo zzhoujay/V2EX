@@ -17,6 +17,7 @@ import zhou.v2ex.util.FileUtils;
 
 /**
  * Created by zzhoujay on 2015/7/22 0022.
+ * Member的数据提供者的实现
  */
 public class MemberProvider implements DataProvider<Member> {
 
@@ -125,5 +126,10 @@ public class MemberProvider implements DataProvider<Member> {
             }
         }
         return self;
+    }
+
+    public static boolean clearSelf() {
+        File file = new File(V2EX.getInstance().getCacheDir(), SElF);
+        return file.exists() && file.delete();
     }
 }

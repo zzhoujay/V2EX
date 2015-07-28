@@ -14,16 +14,12 @@
 
     </group>
 
-    <item android:title="其他">
+    <item android:title="@string/other">
         <menu>
             <item
                 android:id="@+id/drawer_about"
                 android:icon="@drawable/ic_info_grey"
                 android:title="@string/about" />
-            <item
-                android:id="@+id/drawer_setting"
-                android:icon="@drawable/ic_settings_grey"
-                android:title="@string/setting" />
         </menu>
     </item>
 

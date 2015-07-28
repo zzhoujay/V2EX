@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_alignParentTop="true"
-        android:background="@color/material_grey_200" />
+        android:background="@color/material_grey_300" />
 
     <ImageButton
         android:id="@+id/reply_btn"
@@ -22,7 +22,6 @@
         android:layout_alignParentRight="true"
         android:layout_below="@id/gap"
         android:background="@drawable/image_btn_bg"
-        android:padding="4dp"
         android:scaleType="centerInside"
         android:src="@drawable/ic_send_grey" />
 

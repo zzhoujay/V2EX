@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -27,9 +28,11 @@ import zhou.v2ex.data.TopicProvider;
 import zhou.v2ex.interfaces.OnItemClickListener;
 import zhou.v2ex.interfaces.OnLoadCompleteListener;
 import zhou.v2ex.model.Member;
+import zhou.v2ex.model.Node;
 import zhou.v2ex.model.Replies;
 import zhou.v2ex.model.Topic;
 import zhou.v2ex.ui.activity.MemberActivity;
+import zhou.v2ex.ui.activity.NodeActivity;
 import zhou.v2ex.ui.adapter.RepliesAdapter;
 import zhou.v2ex.ui.widget.RichText;
 import zhou.v2ex.util.ContentUtils;
@@ -38,6 +41,7 @@ import zhou.widget.AdvanceAdapter;
 
 /**
  * Created by 州 on 2015/7/20 0020.
+ * Topic详情
  */
 public class TopicDetailFragment extends Fragment {
 
@@ -52,6 +56,8 @@ public class TopicDetailFragment extends Fragment {
     private TopicProvider topicProvider;
     private View detail;
     private AdvanceAdapter advanceAdapter;
+    private CardView cardView;
+    private OnLoadCompleteListener<Replies> onItemClickCallback;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -90,14 +96,33 @@ public class TopicDetailFragment extends Fragment {
         if (topic == null) {
             return;
         }
-        Member member = topic.member;
+        final Member member = topic.member;
+        final Node n = topic.node;
         Picasso.with(getActivity()).load("http:" + member.avatar_normal).placeholder(R.drawable.default_image).into(icon);
         user.setText(member.username);
         time.setText(TimeUtils.friendlyFormat(topic.created * 1000));
         replay.setText(topic.replies + "个回复");
-        node.setText(topic.node.name);
+        node.setText(n.name);
         title.setText(topic.title);
         content.setRichText(ContentUtils.formatContent(topic.content_rendered));
+
+        icon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), MemberActivity.class);
+                intent.putExtra(Member.MEMBER, (Parcelable) member);
+                startActivity(intent);
+            }
+        });
+
+        cardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), NodeActivity.class);
+                intent.putExtra(Node.NODE, (Parcelable) n);
+                startActivity(intent);
+            }
+        });
     }
 
     private void initView(View view) {
@@ -108,11 +133,13 @@ public class TopicDetailFragment extends Fragment {
         node = (TextView) view.findViewById(R.id.topic_node);
         title = (TextView) view.findViewById(R.id.topic_title);
         content = (RichText) view.findViewById(R.id.topic_content);
+        cardView = (CardView) view.findViewById(R.id.topic_node_card);
     }
 
     private void setUp(List<Replies> replies) {
         repliesAdapter = new RepliesAdapter(replies);
         repliesAdapter.setIconClickCallback(onIconClickListener);
+        repliesAdapter.setItemClickCallback(onItemClickListener);
         advanceAdapter = new AdvanceAdapter(repliesAdapter);
         advanceAdapter.addHeader(detail);
         recyclerView.setAdapter(advanceAdapter);
@@ -152,6 +179,15 @@ public class TopicDetailFragment extends Fragment {
             startActivity(intent);
         }
     };
+    private OnItemClickListener onItemClickListener = new OnItemClickListener() {
+        @Override
+        public void onItemClicked(View view, int position) {
+            Replies reply = repliesAdapter.getItem(position - advanceAdapter.getHeaderSize());
+            if (onItemClickCallback != null) {
+                onItemClickCallback.loadComplete(reply);
+            }
+        }
+    };
 
     public void refresh() {
         DataManger.getInstance().refresh(repliesProvider.FILE_NAME, onLoadComplete);
@@ -162,9 +198,11 @@ public class TopicDetailFragment extends Fragment {
         recyclerView.scrollToPosition(advanceAdapter.getItemCount() - 1);
     }
 
+    @SuppressWarnings("unused")
     public void scrollToTop() {
         recyclerView.scrollToPosition(0);
     }
+
 
     @Override
     public void onDestroy() {
@@ -180,4 +218,8 @@ public class TopicDetailFragment extends Fragment {
         return topicDetailFragment;
     }
 
+
+    public void setOnItemClickCallback(OnLoadCompleteListener<Replies> onItemClickCallback) {
+        this.onItemClickCallback = onItemClickCallback;
+    }
 }
