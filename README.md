@@ -12,7 +12,7 @@ V2EX的非官方Android客户端，极力遵循Material Design风格
 * 登录
 * 查看用户信息
 
-> 依赖picasso、okhttp、retrofit    
+> 依赖Glide、okhttp、retrofit
 > 有些地方参考了[v2ex-android](https://github.com/greatyao/v2ex-android)的实现
 
 ### 运行效果
