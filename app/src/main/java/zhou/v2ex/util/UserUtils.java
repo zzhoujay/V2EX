@@ -55,7 +55,7 @@ public class UserUtils {
                         @Override
                         public void onResponse(Response response) throws IOException {
                             boolean flag = false;
-                            if (response.code() == 302) {
+                            if (response.code() >=200&&response.code()<400) {
                                 flag = true;
                             }
                             Log.d("login", (flag ? "success" : "failure"));
